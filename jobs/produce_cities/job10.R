@@ -1,9 +1,9 @@
 
 # SHOULD CHANGE YEAR FOR EACH SCRAPING ROUND
 
-source("packages.R", local = TRUE)
-source("constants.R", local = TRUE)
-source("functions.R", local = TRUE)
+source("R/packages.R", local = TRUE)
+source("R/constants.R", local = TRUE)
+source("R/functions.R", local = TRUE)
 
 # SETUP -----------------------------------------------------------------------
 rs <- rsDriver(browser = "firefox", port = 2011L)
