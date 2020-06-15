@@ -1,4 +1,4 @@
-source("constants.R")
+source("R/constants.R")
 library(drake)
 library(tidyverse)
 library(stringi)
