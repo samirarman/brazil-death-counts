@@ -1,0 +1,10 @@
+---
+title: "Speed and Distance"
+---
+
+# Cars
+The cars dataset:
+```{r}
+head(mtcars)
+```
+
