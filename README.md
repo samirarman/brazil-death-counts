@@ -5,8 +5,6 @@ Os dados estão na forma em que foram "raspados" do [portal da transparência do
 
 **IMPORTANTE: Antes de usar os dados, trate os dados e faça as verificações estatísticas necessárias!**
 
-Um relatório de "sanidade" básico pode ser encontrado [aqui](./sanity_check.html).
-
 ### Dados disponíveis:
 
 **- scraped_data/cities**: Certidões de óbito emitidas em cada cidade, mês a mês, de janeiro de 2015 até junho de 2020. 
