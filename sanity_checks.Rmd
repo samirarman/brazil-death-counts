@@ -1,0 +1,313 @@
+---
+title: "Brazil deaths counts sanity checks"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r}
+loadd(cities_files)
+loadd(cities_summary_files)
+loadd(states_files)
+loadd(states_summary_files)
+loadd(cities_df)
+loadd(cities_summary_df)
+loadd(states_df)
+loadd(states_summary_df)
+loadd(ibge_file)
+```
+
+### Define auxiliary functions
+```{r}
+squash_string <- function(string) {
+    return(string %>%
+               stri_trans_general(id = "Latin-ASCII") %>%
+               stri_trans_tolower())
+}
+
+make_place_key <- function(city, state) {
+  return(paste(city, state, sep = " - "))
+  
+}
+```
+
+### Check that listed file are correct
+
+**Cities monthly files**
+```{r}
+file_list <- list.files(cities_files) %>%
+  squash_string()
+
+head(file_list)
+
+should_exist <-
+  expand.grid(year = as.character(c(2015:2019)),
+              month = MONTHS,
+              states = STATES) %>%
+  rbind(
+    expand.grid(year = "2020",
+                month = c("Janeiro", 
+                          "Fevereiro",
+                          "Março",
+                          "Abril",
+                          "Maio",
+                          "Junho"),
+                states = STATES)
+  ) %>%
+  transmute(files =
+              paste(paste(year, month, states, sep = "-"),
+                    ".csv", sep = "")) %>%
+  pull(files) %>%
+  squash_string()
+
+head(should_exist)
+
+length(should_exist)
+length(file_list)
+
+# Missing files
+setdiff(should_exist, file_list)
+
+# Extra files
+setdiff(file_list, should_exist)
+
+```
+
+**Cities yearly summary files**
+```{r}
+file_list <- list.files(cities_summary_files) %>%
+  squash_string()
+head(file_list)
+
+should_exist <-
+  expand.grid(year = as.character(c(2015:2020)),
+              month = "Todos",
+              states = STATES) %>%
+  transmute(files =
+              paste(paste(year, month, states, sep = "-"),
+                    ".csv", sep = "")) %>%
+  pull(files) %>%
+  squash_string()
+
+head(should_exist)
+
+length(should_exist)
+length(file_list)
+
+# Missing files
+setdiff(should_exist, file_list)
+
+# Extra files
+setdiff(file_list, should_exist)
+```
+
+**States monthly files**
+```{r}
+file_list <- list.files(states_files) %>%
+  squash_string()
+
+head(file_list)
+
+should_exist <-
+  expand.grid(year = as.character(c(2015:2020)),
+              month = MONTHS,
+              states = "Todos") %>%
+  transmute(files =
+              paste(paste(year, month, states, sep = "-"),
+                    ".csv", sep = "")) %>%
+  pull(files) %>%
+  squash_string()
+
+head(should_exist)
+
+# Missing files
+setdiff(should_exist, file_list)
+
+# Extra files
+setdiff(file_list, should_exist)
+
+```
+
+ **States yearly files**
+```{r}
+file_list <- list.files(states_summary_files) %>%
+  squash_string()
+
+head(file_list)
+
+should_exist <-
+  expand.grid(year = as.character(c(2015:2020)),
+              month = "Todos",
+              states = "Todos") %>%
+  transmute(files =
+              paste(paste(year, month, states, sep = "-"),
+                    ".csv", sep = "")) %>%
+  pull(files) %>%
+  squash_string()
+
+head(should_exist)
+
+# Missing files
+setdiff(should_exist, file_list)
+
+# Extra files
+setdiff(file_list, should_exist)
+```
+
+### Check cities names
+
+**Check that cities names in cities_df with errors **
+```{r}
+(master_table <- read_xls("RELATORIO_DTB_BRASIL_MUNICIPIO.xls") %>%
+    mutate(key =
+             squash_string(make_place_key(
+               Nome_Município, Nome_UF
+             )))
+)
+
+(problem_names_c <- cities_df %>%
+    mutate(key = squash_string(make_place_key(Cidade, Estado))) %>%
+    mutate(exists = key %in% master_table$key) %>%
+    filter(exists == FALSE) 
+) 
+
+# Pull unique values
+(problem_names_c %>% pull(key) %>% unique)
+
+```
+
+**Check that cities names in cities_summary_df with errors**
+```{r}
+(problem_names_cs <- cities_summary_df %>%
+   mutate(key = squash_string(make_place_key(Cidade, Estado))) %>%
+   mutate(exists = key %in% master_table$key) %>%
+   filter(exists == FALSE) 
+)
+
+# Pull unique values
+(problem_names_cs %>% pull(key) %>% unique)
+```
+
+**Check all troublesome names**
+```{r}
+c(pull(problem_names_c, key), pull(problem_names_cs, key)) %>% unique
+```
+```{r}
+list_df <- list(cities_table = cities_df, 
+        cities_summary_table = cities_summary_df, 
+        states_table = states_df, 
+        states_summary_table = states_summary_df)
+    summary <- list_df %>%
+        map(. %>% 
+        group_by(Ano, Estado) %>% 
+        summarise(Registros = sum(Registros))
+        )
+    for (i in seq_along(summary)) {
+        summary[[i]]$table <- rep(names(summary[i]), nrow(summary[[i]]))
+    }
+    summary %>% 
+        bind_rows %>% 
+        pivot_wider(names_from = table, values_from = Registros)
+    
+    
+```
+
+### Individual table yearly aggregation
+**Cities table**
+```{r}
+# Define a helper function
+yearly_aggregate <- function(df) {
+  df %>%
+    group_by(Ano) %>%
+    summarise(Registros = sum(Registros))
+}
+
+(ca <- yearly_aggregate(cities_df))
+```
+
+**Cities yearly summary**
+```{r}
+(csa <- yearly_aggregate(cities_summary_df))
+```
+
+**States monthly**
+
+```{r}
+(sa <- yearly_aggregate(states_df))
+```
+
+**States yearly summary**
+
+```{r}
+(ssa <- yearly_aggregate(states_summary_df))
+```
+
+**Side-by-side
+
+```{r}
+bind_rows("cities" = ca, 
+          "cities_summary" = csa, 
+          "states" = sa, 
+          "states_summary" = ssa, 
+          .id = "origin_table") %>% 
+  pivot_wider(names_from = origin_table, values_from = Registros)
+```
+
+**Cities monthly aggregation vs cities yearly summary**
+
+```{r}
+(cma <- cities_df %>%
+  group_by(Estado, Ano) %>%
+  summarise(Registros = sum(Registros))
+)
+
+(cysa <- cities_summary_df %>%
+  select(Cidade, Estado, Ano, Registros) %>%
+    group_by(Estado, Ano) %>%
+  summarise(Registros = sum(Registros))
+)
+
+
+(combined_cities <- 
+    bind_rows("cities" = cma, "cities_summary" = cysa, .id = "origin_table") %>%
+    pivot_wider(names_from = origin_table, values_from = Registros) %>%
+    mutate(delta_abs = abs(cities_summary - cities))
+)
+
+summary(combined_cities)
+
+combined_cities %>% 
+  filter(delta_abs != 0) %>%
+  arrange(-delta_abs)
+
+ggplot(combined_cities) + geom_histogram(aes(delta_abs), binwidth = 10)
+```
+
+**States monthly aggregation vs states yearly summary**
+
+```{r}
+(sma <- states_df %>%
+  group_by(Estado, Ano) %>%
+  summarise(Registros = sum(Registros))
+)
+
+(sysa <- states_summary_df %>%
+  select(Estado, Ano, Registros)
+)
+
+(combined_states <- 
+    bind_rows("states" = sma, "states_summary" = sysa, .id = "origin_table") %>%
+    pivot_wider(names_from = origin_table, values_from = Registros) %>%
+    mutate(delta_abs = abs(states_summary - states))
+)
+
+summary(combined_states)
+
+combined_states %>% 
+  filter(delta_abs != 0) %>%
+  arrange(-delta_abs)
+
+ggplot(combined_states) + geom_histogram(aes(delta_abs), binwidth = 10)
+```
+
+
