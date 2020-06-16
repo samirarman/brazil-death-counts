@@ -4,7 +4,7 @@ library(drake)
 library(tidyverse)
 library(stringi)
 library(readxl)
-library(plotly)
+library(visNetwork)
 
 read_files <- function(dir) {
     data <- list.files(
@@ -84,4 +84,4 @@ plan <- drake_plan(
 )
 print(plan)
 make(plan)
-print(vis_drake_graph(plan))
+visSave(vis_drake_graph(plan), "plan.html")
