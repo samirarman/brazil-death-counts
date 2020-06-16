@@ -1,0 +1,10 @@
+name: "Dados de óbitos do Registro Civil"
+output_dir: "../docs"
+navbar:
+  title: "Dados dos óbitos do Registro Civil"
+  right:
+    - text: "Sobre"
+      href: about.html
+output:
+  html_document:
+theme: flatly
