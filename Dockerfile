@@ -7,7 +7,10 @@ RUN apt-get update &&\
 RUN R -e "options(repos = \
   list(CRAN = 'http://mran.revolutionanalytics.com/snapshot/2020-05-01/')); \
   install.packages('drake'); \
-  install.packages('tidyverse')"
+  install.packages('tidyverse'); \
+  install.packages('visNetwork'); \
+  install.packages('stringi'); \
+  install.packages('readxl')"
 
 RUN mkdir /home/brazil-death-counts && \
  mkdir /home/brazil-death-counts/scraped_data && \
