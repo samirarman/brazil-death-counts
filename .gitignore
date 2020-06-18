@@ -4,3 +4,6 @@
 .Ruserdata
 .DS_Store
 scraped_data*
+.xls
+.xlsx
+.zip
