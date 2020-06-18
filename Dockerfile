@@ -15,16 +15,13 @@ RUN R -e "options(repos = \
   install.packages('visNetwork')"
 
 RUN mkdir /home/brazil-death-data && \
- mkdir /home/brazil-death-data/scraped_data && \
  mkdir /home/brazil-death-data/.drake && \
  mkdir /home/brazil-death-data/site_files && \
  mkdir /home/brazil-death-data/merged_data
 
-COPY scraped_data/ /home/brazil-death-data/scraped_data/
 COPY R/ /home/brazil-death-data/R/
 COPY site_files/ /home/brazil-death-data/site_files
-COPY make.R /home/brazil-death-data/make.R
-COPY RELATORIO_DTB_BRASIL_MUNICIPIO.xls /home/brazil-death-data/RELATORIO_DTB_BRASIL_MUNICIPIO.xls
+COPY make_site.R /home/brazil-death-data/make_site.R
 
 CMD cd /home/brazil-death-data&& \
-  R -e "source('make.R')"
+  R -e "source('make_site.R')"
