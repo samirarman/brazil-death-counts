@@ -1,0 +1,138 @@
+---
+title: "scrape_results_checker"
+output: html_document
+---
+
+```{r}
+loadd(cities_monthly_files)
+loadd(cities_yearly_files)
+loadd(states_monthly_files)
+loadd(states_yearly_files)
+squash_string <- function(string) {
+    return(string %>%
+               stri_trans_general(id = "Latin-ASCII") %>%
+               stri_trans_tolower())
+}
+```
+
+
+**Cities monthly files**
+```{r}
+file_list <- list.files(cities_monthly_files) %>%
+  squash_string()
+
+head(file_list)
+
+should_exist <-
+  expand.grid(year = as.character(c(2015:2019)),
+              month = MONTHS,
+              states = STATES) %>%
+  rbind(
+    expand.grid(year = "2020",
+                month = c("Janeiro", 
+                          "Fevereiro",
+                          "Março",
+                          "Abril",
+                          "Maio",
+                          "Junho"),
+                states = STATES)
+  ) %>%
+  transmute(files =
+              paste(paste(year, month, states, sep = "-"),
+                    ".csv", sep = "")) %>%
+  pull(files) %>%
+  squash_string()
+
+head(should_exist)
+
+length(should_exist)
+length(file_list)
+
+# Missing files
+setdiff(should_exist, file_list)
+
+# Extra files
+setdiff(file_list, should_exist)
+
+```
+
+**Cities yearly files**
+```{r}
+file_list <- list.files(cities_yearly_files) %>%
+  squash_string()
+head(file_list)
+
+should_exist <-
+  expand.grid(year = as.character(c(2015:2020)),
+              month = "Todos",
+              states = STATES) %>%
+  transmute(files =
+              paste(paste(year, month, states, sep = "-"),
+                    ".csv", sep = "")) %>%
+  pull(files) %>%
+  squash_string()
+
+head(should_exist)
+
+length(should_exist)
+length(file_list)
+
+# Missing files
+setdiff(should_exist, file_list)
+
+# Extra files
+setdiff(file_list, should_exist)
+```
+
+**States monthly files**
+```{r}
+file_list <- list.files(states_monthly_files) %>%
+  squash_string()
+
+head(file_list)
+
+should_exist <-
+  expand.grid(year = as.character(c(2015:2020)),
+              month = MONTHS,
+              states = "Todos") %>%
+  transmute(files =
+              paste(paste(year, month, states, sep = "-"),
+                    ".csv", sep = "")) %>%
+  pull(files) %>%
+  squash_string()
+
+head(should_exist)
+
+# Missing files
+setdiff(should_exist, file_list)
+
+# Extra files
+setdiff(file_list, should_exist)
+
+```
+
+ **States yearly files**
+```{r}
+file_list <- list.files(states_yearly_files) %>%
+  squash_string()
+
+head(file_list)
+
+should_exist <-
+  expand.grid(year = as.character(c(2015:2020)),
+              month = "Todos",
+              states = "Todos") %>%
+  transmute(files =
+              paste(paste(year, month, states, sep = "-"),
+                    ".csv", sep = "")) %>%
+  pull(files) %>%
+  squash_string()
+
+head(should_exist)
+
+# Missing files
+setdiff(should_exist, file_list)
+
+# Extra files
+setdiff(file_list, should_exist)
+```

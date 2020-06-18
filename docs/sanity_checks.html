@@ -11,19 +11,20 @@
 
 
 
-<title>Brazil deaths counts sanity checks</title>
+<title>Análise preliminar dos dados coletados</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
-<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -104,33 +105,33 @@ summary {
 <style type="text/css">
 /* padding for bootstrap navbar */
 body {
-  padding-top: 51px;
+  padding-top: 60px;
   padding-bottom: 40px;
 }
 /* offset scroll position for anchor links (for fixed navbar)  */
 .section h1 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 65px;
+  margin-top: -65px;
 }
 .section h2 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 65px;
+  margin-top: -65px;
 }
 .section h3 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 65px;
+  margin-top: -65px;
 }
 .section h4 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 65px;
+  margin-top: -65px;
 }
 .section h5 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 65px;
+  margin-top: -65px;
 }
 .section h6 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 65px;
+  margin-top: -65px;
 }
 .dropdown-submenu {
   position: relative;
@@ -250,6 +251,69 @@ $(document).ready(function () {
 
 
 
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
 
 </head>
 
@@ -257,6 +321,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -273,7 +347,9 @@ $(document).ready(function () {
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        
+        <li>
+  <a href="index.html">Home</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -288,166 +364,15 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Brazil deaths counts sanity checks</h1>
+<h1 class="title toc-ignore">Análise preliminar dos dados coletados</h1>
 
 </div>
 
 
-<pre class="r"><code>loadd(cities_files)
-loadd(cities_summary_files)
-loadd(states_files)
-loadd(states_summary_files)
-loadd(cities_df)
-loadd(cities_summary_df)
-loadd(states_df)
-loadd(states_summary_df)
-loadd(ibge_data)</code></pre>
-<div id="define-auxiliary-functions" class="section level3">
-<h3>Define auxiliary functions</h3>
-<pre class="r"><code>squash_string &lt;- function(string) {
-    return(string %&gt;%
-               stri_trans_general(id = &quot;Latin-ASCII&quot;) %&gt;%
-               stri_trans_tolower())
-}
-
-make_place_key &lt;- function(city, state) {
-  return(paste(city, state, sep = &quot; - &quot;))
-  
-}</code></pre>
-</div>
-<div id="check-that-listed-file-are-correct" class="section level3">
-<h3>Check that listed file are correct</h3>
-<p><strong>Cities monthly files</strong></p>
-<pre class="r"><code>file_list &lt;- list.files(paste(&quot;.&quot;, cities_files, sep = &quot;&quot;)) %&gt;%
-  squash_string()
-
-head(file_list)</code></pre>
-<pre><code>## [1] &quot;2015-abril-acre.csv&quot;     &quot;2015-abril-alagoas.csv&quot; 
-## [3] &quot;2015-abril-amapa.csv&quot;    &quot;2015-abril-amazonas.csv&quot;
-## [5] &quot;2015-abril-bahia.csv&quot;    &quot;2015-abril-ceara.csv&quot;</code></pre>
-<pre class="r"><code>should_exist &lt;-
-  expand.grid(year = as.character(c(2015:2019)),
-              month = MONTHS,
-              states = STATES) %&gt;%
-  rbind(
-    expand.grid(year = &quot;2020&quot;,
-                month = c(&quot;Janeiro&quot;, 
-                          &quot;Fevereiro&quot;,
-                          &quot;Março&quot;,
-                          &quot;Abril&quot;,
-                          &quot;Maio&quot;,
-                          &quot;Junho&quot;),
-                states = STATES)
-  ) %&gt;%
-  transmute(files =
-              paste(paste(year, month, states, sep = &quot;-&quot;),
-                    &quot;.csv&quot;, sep = &quot;&quot;)) %&gt;%
-  pull(files) %&gt;%
-  squash_string()
-
-head(should_exist)</code></pre>
-<pre><code>## [1] &quot;2015-janeiro-acre.csv&quot;   &quot;2016-janeiro-acre.csv&quot;  
-## [3] &quot;2017-janeiro-acre.csv&quot;   &quot;2018-janeiro-acre.csv&quot;  
-## [5] &quot;2019-janeiro-acre.csv&quot;   &quot;2015-fevereiro-acre.csv&quot;</code></pre>
-<pre class="r"><code>length(should_exist)</code></pre>
-<pre><code>## [1] 1782</code></pre>
-<pre class="r"><code>length(file_list)</code></pre>
-<pre><code>## [1] 1782</code></pre>
-<pre class="r"><code># Missing files
-setdiff(should_exist, file_list)</code></pre>
-<pre><code>## character(0)</code></pre>
-<pre class="r"><code># Extra files
-setdiff(file_list, should_exist)</code></pre>
-<pre><code>## character(0)</code></pre>
-<p><strong>Cities yearly summary files</strong></p>
-<pre class="r"><code>file_list &lt;- list.files(paste(&quot;.&quot;, cities_summary_files, sep = &quot;&quot;)) %&gt;%
-  squash_string()
-head(file_list)</code></pre>
-<pre><code>## [1] &quot;2015-todos-acre.csv&quot;     &quot;2015-todos-alagoas.csv&quot; 
-## [3] &quot;2015-todos-amapa.csv&quot;    &quot;2015-todos-amazonas.csv&quot;
-## [5] &quot;2015-todos-bahia.csv&quot;    &quot;2015-todos-ceara.csv&quot;</code></pre>
-<pre class="r"><code>should_exist &lt;-
-  expand.grid(year = as.character(c(2015:2020)),
-              month = &quot;Todos&quot;,
-              states = STATES) %&gt;%
-  transmute(files =
-              paste(paste(year, month, states, sep = &quot;-&quot;),
-                    &quot;.csv&quot;, sep = &quot;&quot;)) %&gt;%
-  pull(files) %&gt;%
-  squash_string()
-
-head(should_exist)</code></pre>
-<pre><code>## [1] &quot;2015-todos-acre.csv&quot; &quot;2016-todos-acre.csv&quot; &quot;2017-todos-acre.csv&quot;
-## [4] &quot;2018-todos-acre.csv&quot; &quot;2019-todos-acre.csv&quot; &quot;2020-todos-acre.csv&quot;</code></pre>
-<pre class="r"><code>length(should_exist)</code></pre>
-<pre><code>## [1] 162</code></pre>
-<pre class="r"><code>length(file_list)</code></pre>
-<pre><code>## [1] 162</code></pre>
-<pre class="r"><code># Missing files
-setdiff(should_exist, file_list)</code></pre>
-<pre><code>## character(0)</code></pre>
-<pre class="r"><code># Extra files
-setdiff(file_list, should_exist)</code></pre>
-<pre><code>## character(0)</code></pre>
-<p><strong>States monthly files</strong></p>
-<pre class="r"><code>file_list &lt;- list.files(paste(&quot;.&quot;, states_files, sep = &quot;&quot;)) %&gt;%
-  squash_string()
-
-head(file_list)</code></pre>
-<pre><code>## [1] &quot;2015-abril-todos.csv&quot;     &quot;2015-agosto-todos.csv&quot;   
-## [3] &quot;2015-dezembro-todos.csv&quot;  &quot;2015-fevereiro-todos.csv&quot;
-## [5] &quot;2015-janeiro-todos.csv&quot;   &quot;2015-julho-todos.csv&quot;</code></pre>
-<pre class="r"><code>should_exist &lt;-
-  expand.grid(year = as.character(c(2015:2020)),
-              month = MONTHS,
-              states = &quot;Todos&quot;) %&gt;%
-  transmute(files =
-              paste(paste(year, month, states, sep = &quot;-&quot;),
-                    &quot;.csv&quot;, sep = &quot;&quot;)) %&gt;%
-  pull(files) %&gt;%
-  squash_string()
-
-head(should_exist)</code></pre>
-<pre><code>## [1] &quot;2015-janeiro-todos.csv&quot; &quot;2016-janeiro-todos.csv&quot; &quot;2017-janeiro-todos.csv&quot;
-## [4] &quot;2018-janeiro-todos.csv&quot; &quot;2019-janeiro-todos.csv&quot; &quot;2020-janeiro-todos.csv&quot;</code></pre>
-<pre class="r"><code># Missing files
-setdiff(should_exist, file_list)</code></pre>
-<pre><code>## [1] &quot;2020-julho-todos.csv&quot;    &quot;2020-agosto-todos.csv&quot;  
-## [3] &quot;2020-setembro-todos.csv&quot; &quot;2020-outubro-todos.csv&quot; 
-## [5] &quot;2020-novembro-todos.csv&quot; &quot;2020-dezembro-todos.csv&quot;</code></pre>
-<pre class="r"><code># Extra files
-setdiff(file_list, should_exist)</code></pre>
-<pre><code>## character(0)</code></pre>
-<p><strong>States yearly files</strong></p>
-<pre class="r"><code>file_list &lt;- list.files(paste(&quot;.&quot;, states_summary_files, sep = &quot;&quot;)) %&gt;%
-  squash_string()
-
-head(file_list)</code></pre>
-<pre><code>## [1] &quot;2015-todos-todos.csv&quot; &quot;2016-todos-todos.csv&quot; &quot;2017-todos-todos.csv&quot;
-## [4] &quot;2018-todos-todos.csv&quot; &quot;2019-todos-todos.csv&quot; &quot;2020-todos-todos.csv&quot;</code></pre>
-<pre class="r"><code>should_exist &lt;-
-  expand.grid(year = as.character(c(2015:2020)),
-              month = &quot;Todos&quot;,
-              states = &quot;Todos&quot;) %&gt;%
-  transmute(files =
-              paste(paste(year, month, states, sep = &quot;-&quot;),
-                    &quot;.csv&quot;, sep = &quot;&quot;)) %&gt;%
-  pull(files) %&gt;%
-  squash_string()
-
-head(should_exist)</code></pre>
-<pre><code>## [1] &quot;2015-todos-todos.csv&quot; &quot;2016-todos-todos.csv&quot; &quot;2017-todos-todos.csv&quot;
-## [4] &quot;2018-todos-todos.csv&quot; &quot;2019-todos-todos.csv&quot; &quot;2020-todos-todos.csv&quot;</code></pre>
-<pre class="r"><code># Missing files
-setdiff(should_exist, file_list)</code></pre>
-<pre><code>## character(0)</code></pre>
-<pre class="r"><code># Extra files
-setdiff(file_list, should_exist)</code></pre>
-<pre><code>## character(0)</code></pre>
-</div>
-<div id="check-cities-names" class="section level3">
-<h3>Check cities names</h3>
-<p><strong>Check that cities names in citiess_df with errors </strong></p>
+<div id="nomes-das-cidades" class="section level1">
+<h1>Nomes das cidades</h1>
+<div id="nomes-das-cidades-com-problemas-de-grafia-na-tabela-by_cities_monthly" class="section level2">
+<h2>Nomes das cidades com problemas de grafia na tabela <em>by_cities_monthly</em></h2>
 <pre class="r"><code>master_table &lt;-
   ibge_data %&gt;%
   mutate(key = squash_string(
@@ -457,7 +382,7 @@ setdiff(file_list, should_exist)</code></pre>
     )
   ))
 
-problem_names_c &lt;- cities_df %&gt;%
+problem_names_c &lt;- by_city_monthly %&gt;%
     mutate(key = squash_string(make_place_key(Cidade, Estado))) %&gt;%
     mutate(exists = key %in% master_table$key) %&gt;%
     filter(exists == FALSE) 
@@ -465,253 +390,246 @@ problem_names_c &lt;- cities_df %&gt;%
 
 # Pull unique values
 (problem_names_c %&gt;% pull(key) %&gt;% unique)</code></pre>
-<pre><code>##  [1] &quot;brazlandia - distrito federal&quot;            
-##  [2] &quot;ceilandia - distrito federal&quot;             
-##  [3] &quot;gama - distrito federal&quot;                  
-##  [4] &quot;guara - distrito federal&quot;                 
-##  [5] &quot;nucleo bandeirantes - distrito federal&quot;   
-##  [6] &quot;paranoa - distrito federal&quot;               
-##  [7] &quot;planaltina - distrito federal&quot;            
-##  [8] &quot;samambaia - distrito federal&quot;             
-##  [9] &quot;sobradinho - distrito federal&quot;            
-## [10] &quot;taguatinga - distrito federal&quot;            
-## [11] &quot;senador la roque - maranhao&quot;              
-## [12] &quot;governador edson lobao - maranhao&quot;        
-## [13] &quot;poxoreo - mato grosso&quot;                    
-## [14] &quot;sao thome das letras - minas gerais&quot;      
-## [15] &quot;brasopolis - minas gerais&quot;                
-## [16] &quot;santarem - paraiba&quot;                       
-## [17] &quot;lagoa do itaenga - pernambuco&quot;            
-## [18] &quot;iguaraci - pernambuco&quot;                    
-## [19] &quot;santana do livramento - rio grande do sul&quot;
-## [20] &quot;espigao do oeste - rondonia&quot;              
-## [21] &quot;biritiba-mirim - sao paulo&quot;               
-## [22] &quot;sao valerio da natividade - tocantins&quot;    
-## [23] &quot;fortaleza do tabocao - tocantins&quot;         
-## [24] &quot;parati - rio de janeiro&quot;                  
-## [25] &quot;olhos d&#39;agua - minas gerais&quot;              
-## [26] &quot;sem peixe - minas gerais&quot;                 
-## [27] &quot;amparo da serra - minas gerais&quot;           
-## [28] &quot;florinia - sao paulo&quot;                     
-## [29] &quot;serido - paraiba&quot;                         
-## [30] &quot;graccho cardoso - sergipe&quot;                
-## [31] &quot;arez - rio grande do norte&quot;               
-## [32] &quot;couto de magalhaes - tocantins&quot;           
-## [33] &quot;eldorado dos carajas - para&quot;              
-## [34] &quot;jequirica - bahia&quot;                        
-## [35] &quot;santa isabel do para - para&quot;              
-## [36] &quot;campo de santana - paraiba&quot;</code></pre>
-<p><strong>Check that cities names in cities_summary_df with errors</strong></p>
-<pre class="r"><code>problem_names_cs &lt;- cities_summary_df %&gt;%
+<pre><code>##  [1] &quot;brazlandia - distrito federal&quot;             &quot;ceilandia - distrito federal&quot;             
+##  [3] &quot;gama - distrito federal&quot;                   &quot;guara - distrito federal&quot;                 
+##  [5] &quot;nucleo bandeirantes - distrito federal&quot;    &quot;paranoa - distrito federal&quot;               
+##  [7] &quot;planaltina - distrito federal&quot;             &quot;samambaia - distrito federal&quot;             
+##  [9] &quot;sobradinho - distrito federal&quot;             &quot;taguatinga - distrito federal&quot;            
+## [11] &quot;senador la roque - maranhao&quot;               &quot;governador edson lobao - maranhao&quot;        
+## [13] &quot;poxoreo - mato grosso&quot;                     &quot;sao thome das letras - minas gerais&quot;      
+## [15] &quot;brasopolis - minas gerais&quot;                 &quot;santarem - paraiba&quot;                       
+## [17] &quot;lagoa do itaenga - pernambuco&quot;             &quot;iguaraci - pernambuco&quot;                    
+## [19] &quot;santana do livramento - rio grande do sul&quot; &quot;espigao do oeste - rondonia&quot;              
+## [21] &quot;biritiba-mirim - sao paulo&quot;                &quot;sao valerio da natividade - tocantins&quot;    
+## [23] &quot;fortaleza do tabocao - tocantins&quot;          &quot;parati - rio de janeiro&quot;                  
+## [25] &quot;olhos d&#39;agua - minas gerais&quot;               &quot;sem peixe - minas gerais&quot;                 
+## [27] &quot;amparo da serra - minas gerais&quot;            &quot;florinia - sao paulo&quot;                     
+## [29] &quot;serido - paraiba&quot;                          &quot;graccho cardoso - sergipe&quot;                
+## [31] &quot;arez - rio grande do norte&quot;                &quot;couto de magalhaes - tocantins&quot;           
+## [33] &quot;eldorado dos carajas - para&quot;               &quot;jequirica - bahia&quot;                        
+## [35] &quot;santa isabel do para - para&quot;               &quot;campo de santana - paraiba&quot;</code></pre>
+</div>
+<div id="nomes-das-cidades-com-problemas-de-grafia-na-tabela-by_cities_yearly" class="section level2">
+<h2>Nomes das cidades com problemas de grafia na tabela <em>by_cities_yearly</em></h2>
+<pre class="r"><code>problem_names_cs &lt;- by_city_yearly %&gt;%
    mutate(key = squash_string(make_place_key(Cidade, Estado))) %&gt;%
    mutate(exists = key %in% master_table$key) %&gt;%
    filter(exists == FALSE) 
 
 # Pull unique values
 (problem_names_cs %&gt;% pull(key) %&gt;% unique)</code></pre>
-<pre><code>##  [1] &quot;brazlandia - distrito federal&quot;            
-##  [2] &quot;ceilandia - distrito federal&quot;             
-##  [3] &quot;gama - distrito federal&quot;                  
-##  [4] &quot;guara - distrito federal&quot;                 
-##  [5] &quot;nucleo bandeirantes - distrito federal&quot;   
-##  [6] &quot;paranoa - distrito federal&quot;               
-##  [7] &quot;planaltina - distrito federal&quot;            
-##  [8] &quot;samambaia - distrito federal&quot;             
-##  [9] &quot;sobradinho - distrito federal&quot;            
-## [10] &quot;taguatinga - distrito federal&quot;            
-## [11] &quot;senador la roque - maranhao&quot;              
-## [12] &quot;governador edson lobao - maranhao&quot;        
-## [13] &quot;poxoreo - mato grosso&quot;                    
-## [14] &quot;sao thome das letras - minas gerais&quot;      
-## [15] &quot;sem peixe - minas gerais&quot;                 
-## [16] &quot;olhos d&#39;agua - minas gerais&quot;              
-## [17] &quot;brasopolis - minas gerais&quot;                
-## [18] &quot;amparo da serra - minas gerais&quot;           
-## [19] &quot;santarem - paraiba&quot;                       
-## [20] &quot;lagoa do itaenga - pernambuco&quot;            
-## [21] &quot;iguaraci - pernambuco&quot;                    
-## [22] &quot;parati - rio de janeiro&quot;                  
-## [23] &quot;santana do livramento - rio grande do sul&quot;
-## [24] &quot;espigao do oeste - rondonia&quot;              
-## [25] &quot;florinia - sao paulo&quot;                     
-## [26] &quot;biritiba-mirim - sao paulo&quot;               
-## [27] &quot;sao valerio da natividade - tocantins&quot;    
-## [28] &quot;fortaleza do tabocao - tocantins&quot;         
-## [29] &quot;serido - paraiba&quot;                         
-## [30] &quot;arez - rio grande do norte&quot;               
-## [31] &quot;graccho cardoso - sergipe&quot;                
-## [32] &quot;couto de magalhaes - tocantins&quot;           
-## [33] &quot;eldorado dos carajas - para&quot;              
-## [34] &quot;jequirica - bahia&quot;                        
-## [35] &quot;campo de santana - paraiba&quot;               
-## [36] &quot;santa isabel do para - para&quot;</code></pre>
-<p><strong>Check all troublesome names</strong></p>
+<pre><code>##  [1] &quot;brazlandia - distrito federal&quot;             &quot;ceilandia - distrito federal&quot;             
+##  [3] &quot;gama - distrito federal&quot;                   &quot;guara - distrito federal&quot;                 
+##  [5] &quot;nucleo bandeirantes - distrito federal&quot;    &quot;paranoa - distrito federal&quot;               
+##  [7] &quot;planaltina - distrito federal&quot;             &quot;samambaia - distrito federal&quot;             
+##  [9] &quot;sobradinho - distrito federal&quot;             &quot;taguatinga - distrito federal&quot;            
+## [11] &quot;senador la roque - maranhao&quot;               &quot;governador edson lobao - maranhao&quot;        
+## [13] &quot;poxoreo - mato grosso&quot;                     &quot;sao thome das letras - minas gerais&quot;      
+## [15] &quot;sem peixe - minas gerais&quot;                  &quot;olhos d&#39;agua - minas gerais&quot;              
+## [17] &quot;brasopolis - minas gerais&quot;                 &quot;amparo da serra - minas gerais&quot;           
+## [19] &quot;santarem - paraiba&quot;                        &quot;lagoa do itaenga - pernambuco&quot;            
+## [21] &quot;iguaraci - pernambuco&quot;                     &quot;parati - rio de janeiro&quot;                  
+## [23] &quot;santana do livramento - rio grande do sul&quot; &quot;espigao do oeste - rondonia&quot;              
+## [25] &quot;florinia - sao paulo&quot;                      &quot;biritiba-mirim - sao paulo&quot;               
+## [27] &quot;sao valerio da natividade - tocantins&quot;     &quot;fortaleza do tabocao - tocantins&quot;         
+## [29] &quot;serido - paraiba&quot;                          &quot;arez - rio grande do norte&quot;               
+## [31] &quot;graccho cardoso - sergipe&quot;                 &quot;couto de magalhaes - tocantins&quot;           
+## [33] &quot;eldorado dos carajas - para&quot;               &quot;jequirica - bahia&quot;                        
+## [35] &quot;campo de santana - paraiba&quot;                &quot;santa isabel do para - para&quot;</code></pre>
+</div>
+<div id="todos-os-nomes-das-cidades-com-problemas-de-grafia" class="section level2">
+<h2>Todos os nomes das cidades com problemas de grafia</h2>
 <pre class="r"><code>c(pull(problem_names_c, key), pull(problem_names_cs, key)) %&gt;% unique</code></pre>
-<pre><code>##  [1] &quot;brazlandia - distrito federal&quot;            
-##  [2] &quot;ceilandia - distrito federal&quot;             
-##  [3] &quot;gama - distrito federal&quot;                  
-##  [4] &quot;guara - distrito federal&quot;                 
-##  [5] &quot;nucleo bandeirantes - distrito federal&quot;   
-##  [6] &quot;paranoa - distrito federal&quot;               
-##  [7] &quot;planaltina - distrito federal&quot;            
-##  [8] &quot;samambaia - distrito federal&quot;             
-##  [9] &quot;sobradinho - distrito federal&quot;            
-## [10] &quot;taguatinga - distrito federal&quot;            
-## [11] &quot;senador la roque - maranhao&quot;              
-## [12] &quot;governador edson lobao - maranhao&quot;        
-## [13] &quot;poxoreo - mato grosso&quot;                    
-## [14] &quot;sao thome das letras - minas gerais&quot;      
-## [15] &quot;brasopolis - minas gerais&quot;                
-## [16] &quot;santarem - paraiba&quot;                       
-## [17] &quot;lagoa do itaenga - pernambuco&quot;            
-## [18] &quot;iguaraci - pernambuco&quot;                    
-## [19] &quot;santana do livramento - rio grande do sul&quot;
-## [20] &quot;espigao do oeste - rondonia&quot;              
-## [21] &quot;biritiba-mirim - sao paulo&quot;               
-## [22] &quot;sao valerio da natividade - tocantins&quot;    
-## [23] &quot;fortaleza do tabocao - tocantins&quot;         
-## [24] &quot;parati - rio de janeiro&quot;                  
-## [25] &quot;olhos d&#39;agua - minas gerais&quot;              
-## [26] &quot;sem peixe - minas gerais&quot;                 
-## [27] &quot;amparo da serra - minas gerais&quot;           
-## [28] &quot;florinia - sao paulo&quot;                     
-## [29] &quot;serido - paraiba&quot;                         
-## [30] &quot;graccho cardoso - sergipe&quot;                
-## [31] &quot;arez - rio grande do norte&quot;               
-## [32] &quot;couto de magalhaes - tocantins&quot;           
-## [33] &quot;eldorado dos carajas - para&quot;              
-## [34] &quot;jequirica - bahia&quot;                        
-## [35] &quot;santa isabel do para - para&quot;              
-## [36] &quot;campo de santana - paraiba&quot;</code></pre>
-<pre class="r"><code>list_df &lt;- list(cities_table = cities_df, 
-        cities_summary_table = cities_summary_df, 
-        states_table = states_df, 
-        states_summary_table = states_summary_df)
+<pre><code>##  [1] &quot;brazlandia - distrito federal&quot;             &quot;ceilandia - distrito federal&quot;             
+##  [3] &quot;gama - distrito federal&quot;                   &quot;guara - distrito federal&quot;                 
+##  [5] &quot;nucleo bandeirantes - distrito federal&quot;    &quot;paranoa - distrito federal&quot;               
+##  [7] &quot;planaltina - distrito federal&quot;             &quot;samambaia - distrito federal&quot;             
+##  [9] &quot;sobradinho - distrito federal&quot;             &quot;taguatinga - distrito federal&quot;            
+## [11] &quot;senador la roque - maranhao&quot;               &quot;governador edson lobao - maranhao&quot;        
+## [13] &quot;poxoreo - mato grosso&quot;                     &quot;sao thome das letras - minas gerais&quot;      
+## [15] &quot;brasopolis - minas gerais&quot;                 &quot;santarem - paraiba&quot;                       
+## [17] &quot;lagoa do itaenga - pernambuco&quot;             &quot;iguaraci - pernambuco&quot;                    
+## [19] &quot;santana do livramento - rio grande do sul&quot; &quot;espigao do oeste - rondonia&quot;              
+## [21] &quot;biritiba-mirim - sao paulo&quot;                &quot;sao valerio da natividade - tocantins&quot;    
+## [23] &quot;fortaleza do tabocao - tocantins&quot;          &quot;parati - rio de janeiro&quot;                  
+## [25] &quot;olhos d&#39;agua - minas gerais&quot;               &quot;sem peixe - minas gerais&quot;                 
+## [27] &quot;amparo da serra - minas gerais&quot;            &quot;florinia - sao paulo&quot;                     
+## [29] &quot;serido - paraiba&quot;                          &quot;graccho cardoso - sergipe&quot;                
+## [31] &quot;arez - rio grande do norte&quot;                &quot;couto de magalhaes - tocantins&quot;           
+## [33] &quot;eldorado dos carajas - para&quot;               &quot;jequirica - bahia&quot;                        
+## [35] &quot;santa isabel do para - para&quot;               &quot;campo de santana - paraiba&quot;</code></pre>
+<pre class="r"><code>list_df &lt;- list(cities_table = by_city_monthly, 
+        cities_summary_table = by_city_yearly, 
+        states_table = by_state_monthly, 
+        states_summary_table = by_state_yearly)
     summary &lt;- list_df %&gt;%
         map(. %&gt;% 
         group_by(Ano, Estado) %&gt;% 
         summarise(Registros = sum(Registros))
-        )</code></pre>
-<pre><code>## `summarise()` regrouping output by &#39;Ano&#39; (override with `.groups` argument)
-## `summarise()` regrouping output by &#39;Ano&#39; (override with `.groups` argument)
-## `summarise()` regrouping output by &#39;Ano&#39; (override with `.groups` argument)
-## `summarise()` regrouping output by &#39;Ano&#39; (override with `.groups` argument)</code></pre>
-<pre class="r"><code>    for (i in seq_along(summary)) {
+        )
+    for (i in seq_along(summary)) {
         summary[[i]]$table &lt;- rep(names(summary[i]), nrow(summary[[i]]))
     }
     summary %&gt;% 
         bind_rows %&gt;% 
         pivot_wider(names_from = table, values_from = Registros)</code></pre>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["Ano"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["Estado"],"name":[2],"type":["chr"],"align":["left"]},{"label":["cities_table"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["cities_summary_table"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["states_table"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["states_summary_table"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"2015","2":"Acre","3":"2524","4":"2524","5":"2524","6":"2524"},{"1":"2015","2":"Alagoas","3":"7369","4":"7369","5":"7000","6":"7000"},{"1":"2015","2":"Amapá","3":"1978","4":"1991","5":"1989","6":"1989"},{"1":"2015","2":"Amazonas","3":"2481","4":"2656","5":"2542","6":"2542"},{"1":"2015","2":"Bahia","3":"29777","4":"29777","5":"28580","6":"28580"},{"1":"2015","2":"Ceará","3":"8597","4":"8597","5":"8169","6":"8169"},{"1":"2015","2":"Distrito Federal","3":"13854","4":"13897","5":"13897","6":"13897"},{"1":"2015","2":"Espírito Santo","3":"22476","4":"22555","5":"22555","6":"22555"},{"1":"2015","2":"Goiás","3":"22956","4":"23143","5":"23143","6":"23143"},{"1":"2015","2":"Maranhão","3":"2033","4":"2036","5":"2036","6":"2036"},{"1":"2015","2":"Mato Grosso","3":"15713","4":"15716","5":"15713","6":"15713"},{"1":"2015","2":"Mato Grosso do Sul","3":"7533","4":"7533","5":"7533","6":"7533"},{"1":"2015","2":"Minas Gerais","3":"119590","4":"119590","5":"119590","6":"119590"},{"1":"2015","2":"Pará","3":"3785","4":"3805","5":"3805","6":"3805"},{"1":"2015","2":"Paraíba","3":"17651","4":"17843","5":"17843","6":"17843"},{"1":"2015","2":"Paraná","3":"71379","4":"71379","5":"71379","6":"71379"},{"1":"2015","2":"Pernambuco","3":"50480","4":"50480","5":"50480","6":"50480"},{"1":"2015","2":"Piauí","3":"2668","4":"2669","5":"2669","6":"2669"},{"1":"2015","2":"Rio de Janeiro","3":"12550","4":"12636","5":"12550","6":"12550"},{"1":"2015","2":"Rio Grande do Norte","3":"3916","4":"3945","5":"3945","6":"3945"},{"1":"2015","2":"Rio Grande do Sul","3":"32624","4":"32653","5":"32624","6":"32624"},{"1":"2015","2":"Rondônia","3":"5475","4":"5482","5":"5482","6":"5482"},{"1":"2015","2":"Roraima","3":"870","4":"870","5":"870","6":"870"},{"1":"2015","2":"Santa Catarina","3":"29695","4":"29679","5":"29671","6":"29671"},{"1":"2015","2":"São Paulo","3":"286739","4":"286850","5":"286739","6":"286739"},{"1":"2015","2":"Sergipe","3":"11087","4":"11112","5":"11112","6":"11112"},{"1":"2015","2":"Tocantins","3":"2731","4":"2860","5":"2860","6":"2860"},{"1":"2016","2":"Acre","3":"2486","4":"2486","5":"2486","6":"2486"},{"1":"2016","2":"Alagoas","3":"10997","4":"10997","5":"10560","6":"10560"},{"1":"2016","2":"Amapá","3":"1888","4":"1918","5":"1888","6":"1888"},{"1":"2016","2":"Amazonas","3":"3768","4":"3768","5":"3768","6":"3768"},{"1":"2016","2":"Bahia","3":"31077","4":"31176","5":"31135","6":"31135"},{"1":"2016","2":"Ceará","3":"26632","4":"26881","5":"26640","6":"26640"},{"1":"2016","2":"Distrito Federal","3":"13974","4":"13983","5":"13983","6":"13983"},{"1":"2016","2":"Espírito Santo","3":"23276","4":"23296","5":"23296","6":"23296"},{"1":"2016","2":"Goiás","3":"24537","4":"24639","5":"24639","6":"24639"},{"1":"2016","2":"Maranhão","3":"5129","4":"5121","5":"5121","6":"5121"},{"1":"2016","2":"Mato Grosso","3":"14993","4":"14993","5":"14953","6":"14953"},{"1":"2016","2":"Mato Grosso do Sul","3":"14629","4":"14609","5":"14609","6":"14609"},{"1":"2016","2":"Minas Gerais","3":"134611","4":"134616","5":"134607","6":"134607"},{"1":"2016","2":"Pará","3":"10527","4":"10526","5":"10526","6":"10526"},{"1":"2016","2":"Paraíba","3":"21107","4":"21270","5":"21268","6":"21268"},{"1":"2016","2":"Paraná","3":"75251","4":"75250","5":"75250","6":"75250"},{"1":"2016","2":"Pernambuco","3":"56782","4":"56764","5":"56746","6":"56746"},{"1":"2016","2":"Piauí","3":"7062","4":"7075","5":"7075","6":"7075"},{"1":"2016","2":"Rio de Janeiro","3":"31477","4":"31477","5":"27529","6":"27529"},{"1":"2016","2":"Rio Grande do Norte","3":"7802","4":"7957","5":"7957","6":"7957"},{"1":"2016","2":"Rio Grande do Sul","3":"37150","4":"37150","5":"34045","6":"34045"},{"1":"2016","2":"Rondônia","3":"7014","4":"7036","5":"7036","6":"7036"},{"1":"2016","2":"Roraima","3":"1707","4":"1707","5":"1707","6":"1707"},{"1":"2016","2":"Santa Catarina","3":"33585","4":"33585","5":"33289","6":"33289"},{"1":"2016","2":"São Paulo","3":"299939","4":"299945","5":"299936","6":"299936"},{"1":"2016","2":"Sergipe","3":"12327","4":"12329","5":"12329","6":"12329"},{"1":"2016","2":"Tocantins","3":"4102","4":"4101","5":"4101","6":"4101"},{"1":"2017","2":"Acre","3":"3809","4":"3809","5":"3809","6":"3809"},{"1":"2017","2":"Alagoas","3":"11584","4":"11584","5":"11092","6":"11092"},{"1":"2017","2":"Amapá","3":"2263","4":"2264","5":"2263","6":"2263"},{"1":"2017","2":"Amazonas","3":"4657","4":"4657","5":"4657","6":"4657"},{"1":"2017","2":"Bahia","3":"39957","4":"39957","5":"39362","6":"39362"},{"1":"2017","2":"Ceará","3":"37516","4":"37535","5":"37535","6":"37535"},{"1":"2017","2":"Distrito Federal","3":"14395","4":"14396","5":"14396","6":"14396"},{"1":"2017","2":"Espírito Santo","3":"24404","4":"24431","5":"24431","6":"24431"},{"1":"2017","2":"Goiás","3":"28589","4":"28620","5":"28620","6":"28620"},{"1":"2017","2":"Maranhão","3":"5955","4":"5956","5":"5956","6":"5956"},{"1":"2017","2":"Mato Grosso","3":"16249","4":"16367","5":"16249","6":"16249"},{"1":"2017","2":"Mato Grosso do Sul","3":"14454","4":"14454","5":"14454","6":"14454"},{"1":"2017","2":"Minas Gerais","3":"136705","4":"136714","5":"136705","6":"136705"},{"1":"2017","2":"Pará","3":"11113","4":"11119","5":"11119","6":"11119"},{"1":"2017","2":"Paraíba","3":"22488","4":"22648","5":"22648","6":"22648"},{"1":"2017","2":"Paraná","3":"72252","4":"72252","5":"72252","6":"72252"},{"1":"2017","2":"Pernambuco","3":"58513","4":"58515","5":"58513","6":"58513"},{"1":"2017","2":"Piauí","3":"5769","4":"5771","5":"5771","6":"5771"},{"1":"2017","2":"Rio de Janeiro","3":"17414","4":"17493","5":"17414","6":"17414"},{"1":"2017","2":"Rio Grande do Norte","3":"10621","4":"10706","5":"10706","6":"10706"},{"1":"2017","2":"Rio Grande do Sul","3":"47048","4":"47049","5":"47048","6":"47048"},{"1":"2017","2":"Rondônia","3":"7277","4":"7300","5":"7300","6":"7300"},{"1":"2017","2":"Roraima","3":"1693","4":"1700","5":"1700","6":"1700"},{"1":"2017","2":"Santa Catarina","3":"35996","4":"36099","5":"36094","6":"36094"},{"1":"2017","2":"São Paulo","3":"299240","4":"299242","5":"299240","6":"299240"},{"1":"2017","2":"Sergipe","3":"12758","4":"12763","5":"12763","6":"12763"},{"1":"2017","2":"Tocantins","3":"4901","4":"4972","5":"4972","6":"4972"},{"1":"2018","2":"Acre","3":"3909","4":"3909","5":"3909","6":"3909"},{"1":"2018","2":"Alagoas","3":"14131","4":"14131","5":"13579","6":"13579"},{"1":"2018","2":"Amapá","3":"2110","4":"2324","5":"2143","6":"2143"},{"1":"2018","2":"Amazonas","3":"6666","4":"6667","5":"6667","6":"6667"},{"1":"2018","2":"Bahia","3":"56765","4":"56907","5":"56830","6":"56830"},{"1":"2018","2":"Ceará","3":"40381","4":"40401","5":"40401","6":"40401"},{"1":"2018","2":"Distrito Federal","3":"14352","4":"14352","5":"14352","6":"14352"},{"1":"2018","2":"Espírito Santo","3":"23758","4":"23778","5":"23778","6":"23778"},{"1":"2018","2":"Goiás","3":"30602","4":"30616","5":"30616","6":"30616"},{"1":"2018","2":"Maranhão","3":"13846","4":"13930","5":"13849","6":"13849"},{"1":"2018","2":"Mato Grosso","3":"15325","4":"15446","5":"15325","6":"15325"},{"1":"2018","2":"Mato Grosso do Sul","3":"15498","4":"15498","5":"15498","6":"15498"},{"1":"2018","2":"Minas Gerais","3":"128506","4":"128506","5":"128506","6":"128506"},{"1":"2018","2":"Pará","3":"16328","4":"16340","5":"16338","6":"16338"},{"1":"2018","2":"Paraíba","3":"25672","4":"25721","5":"25721","6":"25721"},{"1":"2018","2":"Paraná","3":"73038","4":"73038","5":"73038","6":"73038"},{"1":"2018","2":"Pernambuco","3":"59449","4":"59450","5":"59449","6":"59449"},{"1":"2018","2":"Piauí","3":"10549","4":"10585","5":"10585","6":"10585"},{"1":"2018","2":"Rio de Janeiro","3":"69224","4":"69224","5":"66227","6":"66227"},{"1":"2018","2":"Rio Grande do Norte","3":"13560","4":"13678","5":"13678","6":"13678"},{"1":"2018","2":"Rio Grande do Sul","3":"73576","4":"73576","5":"73576","6":"73576"},{"1":"2018","2":"Rondônia","3":"7723","4":"7729","5":"7729","6":"7729"},{"1":"2018","2":"Roraima","3":"2308","4":"2316","5":"2316","6":"2316"},{"1":"2018","2":"Santa Catarina","3":"40110","4":"40129","5":"40128","6":"40128"},{"1":"2018","2":"São Paulo","3":"302907","4":"302925","5":"302907","6":"302907"},{"1":"2018","2":"Sergipe","3":"12602","4":"12603","5":"12603","6":"12603"},{"1":"2018","2":"Tocantins","3":"5946","4":"5978","5":"5978","6":"5978"},{"1":"2019","2":"Acre","3":"3804","4":"3804","5":"3804","6":"3804"},{"1":"2019","2":"Alagoas","3":"17150","4":"17150","5":"16583","6":"16583"},{"1":"2019","2":"Amapá","3":"2519","4":"2521","5":"2521","6":"2521"},{"1":"2019","2":"Amazonas","3":"13879","4":"13976","5":"13976","6":"13976"},{"1":"2019","2":"Bahia","3":"65268","4":"65268","5":"64766","6":"64766"},{"1":"2019","2":"Ceará","3":"41180","4":"41201","5":"41199","6":"41199"},{"1":"2019","2":"Distrito Federal","3":"14861","4":"14863","5":"14863","6":"14863"},{"1":"2019","2":"Espírito Santo","3":"24742","4":"24759","5":"24756","6":"24756"},{"1":"2019","2":"Goiás","3":"32198","4":"32234","5":"32234","6":"32234"},{"1":"2019","2":"Maranhão","3":"20370","4":"20414","5":"20374","6":"20374"},{"1":"2019","2":"Mato Grosso","3":"13540","4":"13540","5":"13510","6":"13510"},{"1":"2019","2":"Mato Grosso do Sul","3":"16124","4":"16124","5":"16124","6":"16124"},{"1":"2019","2":"Minas Gerais","3":"123437","4":"123486","5":"123437","6":"123437"},{"1":"2019","2":"Pará","3":"25529","4":"25578","5":"25578","6":"25578"},{"1":"2019","2":"Paraíba","3":"26946","4":"27012","5":"27012","6":"27012"},{"1":"2019","2":"Paraná","3":"69982","4":"69982","5":"69982","6":"69982"},{"1":"2019","2":"Pernambuco","3":"61664","4":"61688","5":"61664","6":"61664"},{"1":"2019","2":"Piauí","3":"14581","4":"14581","5":"14581","6":"14581"},{"1":"2019","2":"Rio de Janeiro","3":"137615","4":"137636","5":"137615","6":"137615"},{"1":"2019","2":"Rio Grande do Norte","3":"16443","4":"16488","5":"16488","6":"16488"},{"1":"2019","2":"Rio Grande do Sul","3":"89448","4":"89448","5":"89448","6":"89448"},{"1":"2019","2":"Rondônia","3":"7840","4":"7856","5":"7856","6":"7856"},{"1":"2019","2":"Roraima","3":"2303","4":"2303","5":"2303","6":"2303"},{"1":"2019","2":"Santa Catarina","3":"41512","4":"41513","5":"41513","6":"41513"},{"1":"2019","2":"São Paulo","3":"311562","4":"311570","5":"311562","6":"311562"},{"1":"2019","2":"Sergipe","3":"12616","4":"12617","5":"12616","6":"12616"},{"1":"2019","2":"Tocantins","3":"5960","4":"5961","5":"5961","6":"5961"},{"1":"2020","2":"Acre","3":"1998","4":"2004","5":"1999","6":"2004"},{"1":"2020","2":"Alagoas","3":"8885","4":"8885","5":"8688","6":"8885"},{"1":"2020","2":"Amapá","3":"1085","4":"1099","5":"1099","6":"1099"},{"1":"2020","2":"Amazonas","3":"9780","4":"9783","5":"9783","6":"9783"},{"1":"2020","2":"Bahia","3":"28551","4":"28551","5":"28335","6":"28551"},{"1":"2020","2":"Ceará","3":"24356","4":"24561","5":"24396","6":"24561"},{"1":"2020","2":"Distrito Federal","3":"6594","4":"6602","5":"6602","6":"6602"},{"1":"2020","2":"Espírito Santo","3":"11824","4":"11829","5":"11827","6":"11829"},{"1":"2020","2":"Goiás","3":"14175","4":"14264","5":"14196","6":"14264"},{"1":"2020","2":"Maranhão","3":"11352","4":"11460","5":"11400","6":"11460"},{"1":"2020","2":"Mato Grosso","3":"5766","4":"5783","5":"5766","6":"5783"},{"1":"2020","2":"Mato Grosso do Sul","3":"6723","4":"6724","5":"6723","6":"6724"},{"1":"2020","2":"Minas Gerais","3":"54657","4":"54751","5":"54672","6":"54751"},{"1":"2020","2":"Pará","3":"14294","4":"14502","5":"14303","6":"14502"},{"1":"2020","2":"Paraíba","3":"12199","4":"12235","5":"12230","6":"12235"},{"1":"2020","2":"Paraná","3":"30166","4":"30198","5":"30171","6":"30198"},{"1":"2020","2":"Pernambuco","3":"32858","4":"32913","5":"32863","6":"32913"},{"1":"2020","2":"Piauí","3":"5332","4":"5385","5":"5370","6":"5385"},{"1":"2020","2":"Rio de Janeiro","3":"69722","4":"69722","5":"69704","6":"69722"},{"1":"2020","2":"Rio Grande do Norte","3":"7196","4":"7227","5":"7197","6":"7227"},{"1":"2020","2":"Rio Grande do Sul","3":"36936","4":"36977","5":"36936","6":"36977"},{"1":"2020","2":"Rondônia","3":"3517","4":"3521","5":"3521","6":"3521"},{"1":"2020","2":"Roraima","3":"1150","4":"1150","5":"1150","6":"1150"},{"1":"2020","2":"Santa Catarina","3":"17661","4":"17695","5":"17673","6":"17695"},{"1":"2020","2":"São Paulo","3":"148800","4":"148831","5":"148804","6":"148831"},{"1":"2020","2":"Sergipe","3":"5500","4":"5510","5":"5504","6":"5510"},{"1":"2020","2":"Tocantins","3":"2648","4":"2649","5":"2648","6":"2649"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
+<pre><code>## # A tibble: 162 x 6
+## # Groups:   Ano [6]
+##      Ano Estado           cities_table cities_summary_table states_table states_summary_table
+##    &lt;dbl&gt; &lt;chr&gt;                   &lt;dbl&gt;                &lt;dbl&gt;        &lt;dbl&gt;                &lt;dbl&gt;
+##  1  2015 Acre                     2524                 2524         2524                 2524
+##  2  2015 Alagoas                  7369                 7369         7000                 7000
+##  3  2015 Amapá                    1978                 1991         1989                 1989
+##  4  2015 Amazonas                 2481                 2656         2542                 2542
+##  5  2015 Bahia                   29777                29777        28580                28580
+##  6  2015 Ceará                    8597                 8597         8169                 8169
+##  7  2015 Distrito Federal        13854                13897        13897                13897
+##  8  2015 Espírito Santo          22476                22555        22555                22555
+##  9  2015 Goiás                   22956                23143        23143                23143
+## 10  2015 Maranhão                 2033                 2036         2036                 2036
+## # … with 152 more rows</code></pre>
 </div>
 </div>
-<div id="individual-table-yearly-aggregation" class="section level3">
-<h3>Individual table yearly aggregation</h3>
-<p><strong>Cities table</strong></p>
-<pre class="r"><code># Define a helper function
-yearly_aggregate &lt;- function(df) {
-  df %&gt;%
-    group_by(Ano) %&gt;%
-    summarise(Registros = sum(Registros))
-}
-
-(ca &lt;- yearly_aggregate(cities_df))</code></pre>
-<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["Ano"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["Registros"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"2015","2":"788531"},{"1":"2016","2":"913829"},{"1":"2017","2":"947620"},{"1":"2018","2":"1078841"},{"1":"2019","2":"1213073"},{"1":"2020","2":"573725"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
+<div id="somas-dos-registros-nas-tabelas" class="section level1">
+<h1>Somas dos registros nas tabelas</h1>
+<div id="tabela-by_city_monthly" class="section level2">
+<h2>Tabela <em>by_city_monthly</em></h2>
+<pre class="r"><code>(ca &lt;- yearly_aggregate(by_city_monthly))</code></pre>
+<pre><code>## # A tibble: 6 x 2
+##     Ano Registros
+##   &lt;dbl&gt;     &lt;dbl&gt;
+## 1  2015    788531
+## 2  2016    913829
+## 3  2017    947620
+## 4  2018   1078841
+## 5  2019   1213073
+## 6  2020    573725</code></pre>
 </div>
-<p><strong>Cities yearly summary</strong></p>
-<pre class="r"><code>(csa &lt;- yearly_aggregate(cities_summary_df))</code></pre>
-<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["Ano"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["Registros"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"2015","2":"789647"},{"1":"2016","2":"914655"},{"1":"2017","2":"948373"},{"1":"2018","2":"1079757"},{"1":"2019","2":"1213573"},{"1":"2020","2":"574811"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
+<div id="tabela-by_city_yearly" class="section level2">
+<h2>Tabela <em>by_city_yearly</em></h2>
+<pre class="r"><code>(csa &lt;- yearly_aggregate(by_city_yearly))</code></pre>
+<pre><code>## # A tibble: 6 x 2
+##     Ano Registros
+##   &lt;dbl&gt;     &lt;dbl&gt;
+## 1  2015    789647
+## 2  2016    914655
+## 3  2017    948373
+## 4  2018   1079757
+## 5  2019   1213573
+## 6  2020    574811</code></pre>
 </div>
-<p><strong>States monthly</strong></p>
-<pre class="r"><code>(sa &lt;- yearly_aggregate(states_df))</code></pre>
-<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["Ano"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["Registros"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"2015","2":"787300"},{"1":"2016","2":"906479"},{"1":"2017","2":"947069"},{"1":"2018","2":"1075726"},{"1":"2019","2":"1212326"},{"1":"2020","2":"573560"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
+<div id="tabela-by_state_monthly" class="section level2">
+<h2>Tabela <em>by_state_monthly</em></h2>
+<pre class="r"><code>(sa &lt;- yearly_aggregate(by_state_monthly))</code></pre>
+<pre><code>## # A tibble: 6 x 2
+##     Ano Registros
+##   &lt;dbl&gt;     &lt;dbl&gt;
+## 1  2015    787300
+## 2  2016    906479
+## 3  2017    947069
+## 4  2018   1075726
+## 5  2019   1212326
+## 6  2020    573560</code></pre>
 </div>
-<p><strong>States yearly summary</strong></p>
-<pre class="r"><code>(ssa &lt;- yearly_aggregate(states_summary_df))</code></pre>
-<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["Ano"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["Registros"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"2015","2":"787300"},{"1":"2016","2":"906479"},{"1":"2017","2":"947069"},{"1":"2018","2":"1075726"},{"1":"2019","2":"1212326"},{"1":"2020","2":"574811"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
+<div id="tabela-by_state_monthly-1" class="section level2">
+<h2>Tabela <em>by_state_monthly</em></h2>
+<pre class="r"><code>(ssa &lt;- yearly_aggregate(by_state_yearly))</code></pre>
+<pre><code>## # A tibble: 6 x 2
+##     Ano Registros
+##   &lt;dbl&gt;     &lt;dbl&gt;
+## 1  2015    787300
+## 2  2016    906479
+## 3  2017    947069
+## 4  2018   1075726
+## 5  2019   1212326
+## 6  2020    574811</code></pre>
 </div>
-<p>**Side-by-side</p>
+<div id="comparação-entre-tabelas" class="section level2">
+<h2>Comparação entre tabelas</h2>
 <pre class="r"><code>bind_rows(&quot;cities&quot; = ca, 
           &quot;cities_summary&quot; = csa, 
           &quot;states&quot; = sa, 
           &quot;states_summary&quot; = ssa, 
           .id = &quot;origin_table&quot;) %&gt;% 
   pivot_wider(names_from = origin_table, values_from = Registros)</code></pre>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["Ano"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["cities"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["cities_summary"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["states"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["states_summary"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"2015","2":"788531","3":"789647","4":"787300","5":"787300"},{"1":"2016","2":"913829","3":"914655","4":"906479","5":"906479"},{"1":"2017","2":"947620","3":"948373","4":"947069","5":"947069"},{"1":"2018","2":"1078841","3":"1079757","4":"1075726","5":"1075726"},{"1":"2019","2":"1213073","3":"1213573","4":"1212326","5":"1212326"},{"1":"2020","2":"573725","3":"574811","4":"573560","5":"574811"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
+<pre><code>## # A tibble: 6 x 5
+##     Ano  cities cities_summary  states states_summary
+##   &lt;dbl&gt;   &lt;dbl&gt;          &lt;dbl&gt;   &lt;dbl&gt;          &lt;dbl&gt;
+## 1  2015  788531         789647  787300         787300
+## 2  2016  913829         914655  906479         906479
+## 3  2017  947620         948373  947069         947069
+## 4  2018 1078841        1079757 1075726        1075726
+## 5  2019 1213073        1213573 1212326        1212326
+## 6  2020  573725         574811  573560         574811</code></pre>
 </div>
-<p><strong>Cities monthly aggregation vs cities yearly summary</strong></p>
-<pre class="r"><code>cma &lt;- cities_df %&gt;%
+<div id="tabela-by_city_monthly-vs-by_city_yearly" class="section level2">
+<h2>Tabela <em>by_city_monthly</em> vs <em>by_city_yearly</em></h2>
+<pre class="r"><code>cma &lt;- by_city_monthly %&gt;%
   group_by(Estado, Ano) %&gt;%
-  summarise(Registros = sum(Registros))</code></pre>
-<pre><code>## `summarise()` regrouping output by &#39;Estado&#39; (override with `.groups` argument)</code></pre>
-<pre class="r"><code>cysa &lt;- cities_summary_df %&gt;%
+  summarise(Registros = sum(Registros))
+
+cysa &lt;- by_city_yearly %&gt;%
   select(Cidade, Estado, Ano, Registros) %&gt;%
     group_by(Estado, Ano) %&gt;%
-  summarise(Registros = sum(Registros))</code></pre>
-<pre><code>## `summarise()` regrouping output by &#39;Estado&#39; (override with `.groups` argument)</code></pre>
-<pre class="r"><code>(combined_cities &lt;- 
+  summarise(Registros = sum(Registros))
+
+
+(combined_cities &lt;- 
     bind_rows(&quot;cities&quot; = cma, &quot;cities_summary&quot; = cysa, .id = &quot;origin_table&quot;) %&gt;%
     pivot_wider(names_from = origin_table, values_from = Registros) %&gt;%
     mutate(delta_abs = abs(cities_summary - cities))
 )</code></pre>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["Estado"],"name":[1],"type":["chr"],"align":["left"]},{"label":["Ano"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["cities"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["cities_summary"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["delta_abs"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"Acre","2":"2015","3":"2524","4":"2524","5":"0"},{"1":"Acre","2":"2016","3":"2486","4":"2486","5":"0"},{"1":"Acre","2":"2017","3":"3809","4":"3809","5":"0"},{"1":"Acre","2":"2018","3":"3909","4":"3909","5":"0"},{"1":"Acre","2":"2019","3":"3804","4":"3804","5":"0"},{"1":"Acre","2":"2020","3":"1998","4":"2004","5":"6"},{"1":"Alagoas","2":"2015","3":"7369","4":"7369","5":"0"},{"1":"Alagoas","2":"2016","3":"10997","4":"10997","5":"0"},{"1":"Alagoas","2":"2017","3":"11584","4":"11584","5":"0"},{"1":"Alagoas","2":"2018","3":"14131","4":"14131","5":"0"},{"1":"Alagoas","2":"2019","3":"17150","4":"17150","5":"0"},{"1":"Alagoas","2":"2020","3":"8885","4":"8885","5":"0"},{"1":"Amapá","2":"2015","3":"1978","4":"1991","5":"13"},{"1":"Amapá","2":"2016","3":"1888","4":"1918","5":"30"},{"1":"Amapá","2":"2017","3":"2263","4":"2264","5":"1"},{"1":"Amapá","2":"2018","3":"2110","4":"2324","5":"214"},{"1":"Amapá","2":"2019","3":"2519","4":"2521","5":"2"},{"1":"Amapá","2":"2020","3":"1085","4":"1099","5":"14"},{"1":"Amazonas","2":"2015","3":"2481","4":"2656","5":"175"},{"1":"Amazonas","2":"2016","3":"3768","4":"3768","5":"0"},{"1":"Amazonas","2":"2017","3":"4657","4":"4657","5":"0"},{"1":"Amazonas","2":"2018","3":"6666","4":"6667","5":"1"},{"1":"Amazonas","2":"2019","3":"13879","4":"13976","5":"97"},{"1":"Amazonas","2":"2020","3":"9780","4":"9783","5":"3"},{"1":"Bahia","2":"2015","3":"29777","4":"29777","5":"0"},{"1":"Bahia","2":"2016","3":"31077","4":"31176","5":"99"},{"1":"Bahia","2":"2017","3":"39957","4":"39957","5":"0"},{"1":"Bahia","2":"2018","3":"56765","4":"56907","5":"142"},{"1":"Bahia","2":"2019","3":"65268","4":"65268","5":"0"},{"1":"Bahia","2":"2020","3":"28551","4":"28551","5":"0"},{"1":"Ceará","2":"2015","3":"8597","4":"8597","5":"0"},{"1":"Ceará","2":"2016","3":"26632","4":"26881","5":"249"},{"1":"Ceará","2":"2017","3":"37516","4":"37535","5":"19"},{"1":"Ceará","2":"2018","3":"40381","4":"40401","5":"20"},{"1":"Ceará","2":"2019","3":"41180","4":"41201","5":"21"},{"1":"Ceará","2":"2020","3":"24356","4":"24561","5":"205"},{"1":"Distrito Federal","2":"2015","3":"13854","4":"13897","5":"43"},{"1":"Distrito Federal","2":"2016","3":"13974","4":"13983","5":"9"},{"1":"Distrito Federal","2":"2017","3":"14395","4":"14396","5":"1"},{"1":"Distrito Federal","2":"2018","3":"14352","4":"14352","5":"0"},{"1":"Distrito Federal","2":"2019","3":"14861","4":"14863","5":"2"},{"1":"Distrito Federal","2":"2020","3":"6594","4":"6602","5":"8"},{"1":"Espírito Santo","2":"2015","3":"22476","4":"22555","5":"79"},{"1":"Espírito Santo","2":"2016","3":"23276","4":"23296","5":"20"},{"1":"Espírito Santo","2":"2017","3":"24404","4":"24431","5":"27"},{"1":"Espírito Santo","2":"2018","3":"23758","4":"23778","5":"20"},{"1":"Espírito Santo","2":"2019","3":"24742","4":"24759","5":"17"},{"1":"Espírito Santo","2":"2020","3":"11824","4":"11829","5":"5"},{"1":"Goiás","2":"2015","3":"22956","4":"23143","5":"187"},{"1":"Goiás","2":"2016","3":"24537","4":"24639","5":"102"},{"1":"Goiás","2":"2017","3":"28589","4":"28620","5":"31"},{"1":"Goiás","2":"2018","3":"30602","4":"30616","5":"14"},{"1":"Goiás","2":"2019","3":"32198","4":"32234","5":"36"},{"1":"Goiás","2":"2020","3":"14175","4":"14264","5":"89"},{"1":"Maranhão","2":"2015","3":"2033","4":"2036","5":"3"},{"1":"Maranhão","2":"2016","3":"5129","4":"5121","5":"8"},{"1":"Maranhão","2":"2017","3":"5955","4":"5956","5":"1"},{"1":"Maranhão","2":"2018","3":"13846","4":"13930","5":"84"},{"1":"Maranhão","2":"2019","3":"20370","4":"20414","5":"44"},{"1":"Maranhão","2":"2020","3":"11352","4":"11460","5":"108"},{"1":"Mato Grosso","2":"2015","3":"15713","4":"15716","5":"3"},{"1":"Mato Grosso","2":"2016","3":"14993","4":"14993","5":"0"},{"1":"Mato Grosso","2":"2017","3":"16249","4":"16367","5":"118"},{"1":"Mato Grosso","2":"2018","3":"15325","4":"15446","5":"121"},{"1":"Mato Grosso","2":"2019","3":"13540","4":"13540","5":"0"},{"1":"Mato Grosso","2":"2020","3":"5766","4":"5783","5":"17"},{"1":"Mato Grosso do Sul","2":"2015","3":"7533","4":"7533","5":"0"},{"1":"Mato Grosso do Sul","2":"2016","3":"14629","4":"14609","5":"20"},{"1":"Mato Grosso do Sul","2":"2017","3":"14454","4":"14454","5":"0"},{"1":"Mato Grosso do Sul","2":"2018","3":"15498","4":"15498","5":"0"},{"1":"Mato Grosso do Sul","2":"2019","3":"16124","4":"16124","5":"0"},{"1":"Mato Grosso do Sul","2":"2020","3":"6723","4":"6724","5":"1"},{"1":"Minas Gerais","2":"2015","3":"119590","4":"119590","5":"0"},{"1":"Minas Gerais","2":"2016","3":"134611","4":"134616","5":"5"},{"1":"Minas Gerais","2":"2017","3":"136705","4":"136714","5":"9"},{"1":"Minas Gerais","2":"2018","3":"128506","4":"128506","5":"0"},{"1":"Minas Gerais","2":"2019","3":"123437","4":"123486","5":"49"},{"1":"Minas Gerais","2":"2020","3":"54657","4":"54751","5":"94"},{"1":"Pará","2":"2015","3":"3785","4":"3805","5":"20"},{"1":"Pará","2":"2016","3":"10527","4":"10526","5":"1"},{"1":"Pará","2":"2017","3":"11113","4":"11119","5":"6"},{"1":"Pará","2":"2018","3":"16328","4":"16340","5":"12"},{"1":"Pará","2":"2019","3":"25529","4":"25578","5":"49"},{"1":"Pará","2":"2020","3":"14294","4":"14502","5":"208"},{"1":"Paraíba","2":"2015","3":"17651","4":"17843","5":"192"},{"1":"Paraíba","2":"2016","3":"21107","4":"21270","5":"163"},{"1":"Paraíba","2":"2017","3":"22488","4":"22648","5":"160"},{"1":"Paraíba","2":"2018","3":"25672","4":"25721","5":"49"},{"1":"Paraíba","2":"2019","3":"26946","4":"27012","5":"66"},{"1":"Paraíba","2":"2020","3":"12199","4":"12235","5":"36"},{"1":"Paraná","2":"2015","3":"71379","4":"71379","5":"0"},{"1":"Paraná","2":"2016","3":"75251","4":"75250","5":"1"},{"1":"Paraná","2":"2017","3":"72252","4":"72252","5":"0"},{"1":"Paraná","2":"2018","3":"73038","4":"73038","5":"0"},{"1":"Paraná","2":"2019","3":"69982","4":"69982","5":"0"},{"1":"Paraná","2":"2020","3":"30166","4":"30198","5":"32"},{"1":"Pernambuco","2":"2015","3":"50480","4":"50480","5":"0"},{"1":"Pernambuco","2":"2016","3":"56782","4":"56764","5":"18"},{"1":"Pernambuco","2":"2017","3":"58513","4":"58515","5":"2"},{"1":"Pernambuco","2":"2018","3":"59449","4":"59450","5":"1"},{"1":"Pernambuco","2":"2019","3":"61664","4":"61688","5":"24"},{"1":"Pernambuco","2":"2020","3":"32858","4":"32913","5":"55"},{"1":"Piauí","2":"2015","3":"2668","4":"2669","5":"1"},{"1":"Piauí","2":"2016","3":"7062","4":"7075","5":"13"},{"1":"Piauí","2":"2017","3":"5769","4":"5771","5":"2"},{"1":"Piauí","2":"2018","3":"10549","4":"10585","5":"36"},{"1":"Piauí","2":"2019","3":"14581","4":"14581","5":"0"},{"1":"Piauí","2":"2020","3":"5332","4":"5385","5":"53"},{"1":"Rio de Janeiro","2":"2015","3":"12550","4":"12636","5":"86"},{"1":"Rio de Janeiro","2":"2016","3":"31477","4":"31477","5":"0"},{"1":"Rio de Janeiro","2":"2017","3":"17414","4":"17493","5":"79"},{"1":"Rio de Janeiro","2":"2018","3":"69224","4":"69224","5":"0"},{"1":"Rio de Janeiro","2":"2019","3":"137615","4":"137636","5":"21"},{"1":"Rio de Janeiro","2":"2020","3":"69722","4":"69722","5":"0"},{"1":"Rio Grande do Norte","2":"2015","3":"3916","4":"3945","5":"29"},{"1":"Rio Grande do Norte","2":"2016","3":"7802","4":"7957","5":"155"},{"1":"Rio Grande do Norte","2":"2017","3":"10621","4":"10706","5":"85"},{"1":"Rio Grande do Norte","2":"2018","3":"13560","4":"13678","5":"118"},{"1":"Rio Grande do Norte","2":"2019","3":"16443","4":"16488","5":"45"},{"1":"Rio Grande do Norte","2":"2020","3":"7196","4":"7227","5":"31"},{"1":"Rio Grande do Sul","2":"2015","3":"32624","4":"32653","5":"29"},{"1":"Rio Grande do Sul","2":"2016","3":"37150","4":"37150","5":"0"},{"1":"Rio Grande do Sul","2":"2017","3":"47048","4":"47049","5":"1"},{"1":"Rio Grande do Sul","2":"2018","3":"73576","4":"73576","5":"0"},{"1":"Rio Grande do Sul","2":"2019","3":"89448","4":"89448","5":"0"},{"1":"Rio Grande do Sul","2":"2020","3":"36936","4":"36977","5":"41"},{"1":"Rondônia","2":"2015","3":"5475","4":"5482","5":"7"},{"1":"Rondônia","2":"2016","3":"7014","4":"7036","5":"22"},{"1":"Rondônia","2":"2017","3":"7277","4":"7300","5":"23"},{"1":"Rondônia","2":"2018","3":"7723","4":"7729","5":"6"},{"1":"Rondônia","2":"2019","3":"7840","4":"7856","5":"16"},{"1":"Rondônia","2":"2020","3":"3517","4":"3521","5":"4"},{"1":"Roraima","2":"2015","3":"870","4":"870","5":"0"},{"1":"Roraima","2":"2016","3":"1707","4":"1707","5":"0"},{"1":"Roraima","2":"2017","3":"1693","4":"1700","5":"7"},{"1":"Roraima","2":"2018","3":"2308","4":"2316","5":"8"},{"1":"Roraima","2":"2019","3":"2303","4":"2303","5":"0"},{"1":"Roraima","2":"2020","3":"1150","4":"1150","5":"0"},{"1":"Santa Catarina","2":"2015","3":"29695","4":"29679","5":"16"},{"1":"Santa Catarina","2":"2016","3":"33585","4":"33585","5":"0"},{"1":"Santa Catarina","2":"2017","3":"35996","4":"36099","5":"103"},{"1":"Santa Catarina","2":"2018","3":"40110","4":"40129","5":"19"},{"1":"Santa Catarina","2":"2019","3":"41512","4":"41513","5":"1"},{"1":"Santa Catarina","2":"2020","3":"17661","4":"17695","5":"34"},{"1":"São Paulo","2":"2015","3":"286739","4":"286850","5":"111"},{"1":"São Paulo","2":"2016","3":"299939","4":"299945","5":"6"},{"1":"São Paulo","2":"2017","3":"299240","4":"299242","5":"2"},{"1":"São Paulo","2":"2018","3":"302907","4":"302925","5":"18"},{"1":"São Paulo","2":"2019","3":"311562","4":"311570","5":"8"},{"1":"São Paulo","2":"2020","3":"148800","4":"148831","5":"31"},{"1":"Sergipe","2":"2015","3":"11087","4":"11112","5":"25"},{"1":"Sergipe","2":"2016","3":"12327","4":"12329","5":"2"},{"1":"Sergipe","2":"2017","3":"12758","4":"12763","5":"5"},{"1":"Sergipe","2":"2018","3":"12602","4":"12603","5":"1"},{"1":"Sergipe","2":"2019","3":"12616","4":"12617","5":"1"},{"1":"Sergipe","2":"2020","3":"5500","4":"5510","5":"10"},{"1":"Tocantins","2":"2015","3":"2731","4":"2860","5":"129"},{"1":"Tocantins","2":"2016","3":"4102","4":"4101","5":"1"},{"1":"Tocantins","2":"2017","3":"4901","4":"4972","5":"71"},{"1":"Tocantins","2":"2018","3":"5946","4":"5978","5":"32"},{"1":"Tocantins","2":"2019","3":"5960","4":"5961","5":"1"},{"1":"Tocantins","2":"2020","3":"2648","4":"2649","5":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<pre><code>## # A tibble: 162 x 5
+## # Groups:   Estado [27]
+##    Estado    Ano cities cities_summary delta_abs
+##    &lt;chr&gt;   &lt;dbl&gt;  &lt;dbl&gt;          &lt;dbl&gt;     &lt;dbl&gt;
+##  1 Acre     2015   2524           2524         0
+##  2 Acre     2016   2486           2486         0
+##  3 Acre     2017   3809           3809         0
+##  4 Acre     2018   3909           3909         0
+##  5 Acre     2019   3804           3804         0
+##  6 Acre     2020   1998           2004         6
+##  7 Alagoas  2015   7369           7369         0
+##  8 Alagoas  2016  10997          10997         0
+##  9 Alagoas  2017  11584          11584         0
+## 10 Alagoas  2018  14131          14131         0
+## # … with 152 more rows</code></pre>
 <pre class="r"><code>summary(combined_cities)</code></pre>
-<pre><code>##     Estado               Ano           cities       cities_summary  
-##  Length:162         Min.   :2015   Min.   :   870   Min.   :   870  
-##  Class :character   1st Qu.:2016   1st Qu.:  6680   1st Qu.:  6681  
-##  Mode  :character   Median :2018   Median : 14518   Median : 14542  
-##                     Mean   :2018   Mean   : 34047   Mean   : 34079  
-##                     3rd Qu.:2019   3rd Qu.: 32800   3rd Qu.: 32848  
-##                     Max.   :2020   Max.   :311562   Max.   :311570  
-##    delta_abs     
-##  Min.   :  0.00  
-##  1st Qu.:  0.00  
-##  Median :  8.00  
-##  Mean   : 32.88  
-##  3rd Qu.: 36.00  
-##  Max.   :249.00</code></pre>
+<pre><code>##     Estado               Ano           cities       cities_summary     delta_abs     
+##  Length:162         Min.   :2015   Min.   :   870   Min.   :   870   Min.   :  0.00  
+##  Class :character   1st Qu.:2016   1st Qu.:  6680   1st Qu.:  6681   1st Qu.:  0.00  
+##  Mode  :character   Median :2018   Median : 14518   Median : 14542   Median :  8.00  
+##                     Mean   :2018   Mean   : 34047   Mean   : 34079   Mean   : 32.88  
+##                     3rd Qu.:2019   3rd Qu.: 32800   3rd Qu.: 32848   3rd Qu.: 36.00  
+##                     Max.   :2020   Max.   :311562   Max.   :311570   Max.   :249.00</code></pre>
 <pre class="r"><code>combined_cities %&gt;% 
   filter(delta_abs != 0) %&gt;%
   arrange(-delta_abs)</code></pre>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["Estado"],"name":[1],"type":["chr"],"align":["left"]},{"label":["Ano"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["cities"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["cities_summary"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["delta_abs"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"Ceará","2":"2016","3":"26632","4":"26881","5":"249"},{"1":"Amapá","2":"2018","3":"2110","4":"2324","5":"214"},{"1":"Pará","2":"2020","3":"14294","4":"14502","5":"208"},{"1":"Ceará","2":"2020","3":"24356","4":"24561","5":"205"},{"1":"Paraíba","2":"2015","3":"17651","4":"17843","5":"192"},{"1":"Goiás","2":"2015","3":"22956","4":"23143","5":"187"},{"1":"Amazonas","2":"2015","3":"2481","4":"2656","5":"175"},{"1":"Paraíba","2":"2016","3":"21107","4":"21270","5":"163"},{"1":"Paraíba","2":"2017","3":"22488","4":"22648","5":"160"},{"1":"Rio Grande do Norte","2":"2016","3":"7802","4":"7957","5":"155"},{"1":"Bahia","2":"2018","3":"56765","4":"56907","5":"142"},{"1":"Tocantins","2":"2015","3":"2731","4":"2860","5":"129"},{"1":"Mato Grosso","2":"2018","3":"15325","4":"15446","5":"121"},{"1":"Mato Grosso","2":"2017","3":"16249","4":"16367","5":"118"},{"1":"Rio Grande do Norte","2":"2018","3":"13560","4":"13678","5":"118"},{"1":"São Paulo","2":"2015","3":"286739","4":"286850","5":"111"},{"1":"Maranhão","2":"2020","3":"11352","4":"11460","5":"108"},{"1":"Santa Catarina","2":"2017","3":"35996","4":"36099","5":"103"},{"1":"Goiás","2":"2016","3":"24537","4":"24639","5":"102"},{"1":"Bahia","2":"2016","3":"31077","4":"31176","5":"99"},{"1":"Amazonas","2":"2019","3":"13879","4":"13976","5":"97"},{"1":"Minas Gerais","2":"2020","3":"54657","4":"54751","5":"94"},{"1":"Goiás","2":"2020","3":"14175","4":"14264","5":"89"},{"1":"Rio de Janeiro","2":"2015","3":"12550","4":"12636","5":"86"},{"1":"Rio Grande do Norte","2":"2017","3":"10621","4":"10706","5":"85"},{"1":"Maranhão","2":"2018","3":"13846","4":"13930","5":"84"},{"1":"Espírito Santo","2":"2015","3":"22476","4":"22555","5":"79"},{"1":"Rio de Janeiro","2":"2017","3":"17414","4":"17493","5":"79"},{"1":"Tocantins","2":"2017","3":"4901","4":"4972","5":"71"},{"1":"Paraíba","2":"2019","3":"26946","4":"27012","5":"66"},{"1":"Pernambuco","2":"2020","3":"32858","4":"32913","5":"55"},{"1":"Piauí","2":"2020","3":"5332","4":"5385","5":"53"},{"1":"Minas Gerais","2":"2019","3":"123437","4":"123486","5":"49"},{"1":"Pará","2":"2019","3":"25529","4":"25578","5":"49"},{"1":"Paraíba","2":"2018","3":"25672","4":"25721","5":"49"},{"1":"Rio Grande do Norte","2":"2019","3":"16443","4":"16488","5":"45"},{"1":"Maranhão","2":"2019","3":"20370","4":"20414","5":"44"},{"1":"Distrito Federal","2":"2015","3":"13854","4":"13897","5":"43"},{"1":"Rio Grande do Sul","2":"2020","3":"36936","4":"36977","5":"41"},{"1":"Goiás","2":"2019","3":"32198","4":"32234","5":"36"},{"1":"Paraíba","2":"2020","3":"12199","4":"12235","5":"36"},{"1":"Piauí","2":"2018","3":"10549","4":"10585","5":"36"},{"1":"Santa Catarina","2":"2020","3":"17661","4":"17695","5":"34"},{"1":"Paraná","2":"2020","3":"30166","4":"30198","5":"32"},{"1":"Tocantins","2":"2018","3":"5946","4":"5978","5":"32"},{"1":"Goiás","2":"2017","3":"28589","4":"28620","5":"31"},{"1":"Rio Grande do Norte","2":"2020","3":"7196","4":"7227","5":"31"},{"1":"São Paulo","2":"2020","3":"148800","4":"148831","5":"31"},{"1":"Amapá","2":"2016","3":"1888","4":"1918","5":"30"},{"1":"Rio Grande do Norte","2":"2015","3":"3916","4":"3945","5":"29"},{"1":"Rio Grande do Sul","2":"2015","3":"32624","4":"32653","5":"29"},{"1":"Espírito Santo","2":"2017","3":"24404","4":"24431","5":"27"},{"1":"Sergipe","2":"2015","3":"11087","4":"11112","5":"25"},{"1":"Pernambuco","2":"2019","3":"61664","4":"61688","5":"24"},{"1":"Rondônia","2":"2017","3":"7277","4":"7300","5":"23"},{"1":"Rondônia","2":"2016","3":"7014","4":"7036","5":"22"},{"1":"Ceará","2":"2019","3":"41180","4":"41201","5":"21"},{"1":"Rio de Janeiro","2":"2019","3":"137615","4":"137636","5":"21"},{"1":"Ceará","2":"2018","3":"40381","4":"40401","5":"20"},{"1":"Espírito Santo","2":"2016","3":"23276","4":"23296","5":"20"},{"1":"Espírito Santo","2":"2018","3":"23758","4":"23778","5":"20"},{"1":"Mato Grosso do Sul","2":"2016","3":"14629","4":"14609","5":"20"},{"1":"Pará","2":"2015","3":"3785","4":"3805","5":"20"},{"1":"Ceará","2":"2017","3":"37516","4":"37535","5":"19"},{"1":"Santa Catarina","2":"2018","3":"40110","4":"40129","5":"19"},{"1":"Pernambuco","2":"2016","3":"56782","4":"56764","5":"18"},{"1":"São Paulo","2":"2018","3":"302907","4":"302925","5":"18"},{"1":"Espírito Santo","2":"2019","3":"24742","4":"24759","5":"17"},{"1":"Mato Grosso","2":"2020","3":"5766","4":"5783","5":"17"},{"1":"Rondônia","2":"2019","3":"7840","4":"7856","5":"16"},{"1":"Santa Catarina","2":"2015","3":"29695","4":"29679","5":"16"},{"1":"Amapá","2":"2020","3":"1085","4":"1099","5":"14"},{"1":"Goiás","2":"2018","3":"30602","4":"30616","5":"14"},{"1":"Amapá","2":"2015","3":"1978","4":"1991","5":"13"},{"1":"Piauí","2":"2016","3":"7062","4":"7075","5":"13"},{"1":"Pará","2":"2018","3":"16328","4":"16340","5":"12"},{"1":"Sergipe","2":"2020","3":"5500","4":"5510","5":"10"},{"1":"Distrito Federal","2":"2016","3":"13974","4":"13983","5":"9"},{"1":"Minas Gerais","2":"2017","3":"136705","4":"136714","5":"9"},{"1":"Distrito Federal","2":"2020","3":"6594","4":"6602","5":"8"},{"1":"Maranhão","2":"2016","3":"5129","4":"5121","5":"8"},{"1":"Roraima","2":"2018","3":"2308","4":"2316","5":"8"},{"1":"São Paulo","2":"2019","3":"311562","4":"311570","5":"8"},{"1":"Rondônia","2":"2015","3":"5475","4":"5482","5":"7"},{"1":"Roraima","2":"2017","3":"1693","4":"1700","5":"7"},{"1":"Acre","2":"2020","3":"1998","4":"2004","5":"6"},{"1":"Pará","2":"2017","3":"11113","4":"11119","5":"6"},{"1":"Rondônia","2":"2018","3":"7723","4":"7729","5":"6"},{"1":"São Paulo","2":"2016","3":"299939","4":"299945","5":"6"},{"1":"Espírito Santo","2":"2020","3":"11824","4":"11829","5":"5"},{"1":"Minas Gerais","2":"2016","3":"134611","4":"134616","5":"5"},{"1":"Sergipe","2":"2017","3":"12758","4":"12763","5":"5"},{"1":"Rondônia","2":"2020","3":"3517","4":"3521","5":"4"},{"1":"Amazonas","2":"2020","3":"9780","4":"9783","5":"3"},{"1":"Maranhão","2":"2015","3":"2033","4":"2036","5":"3"},{"1":"Mato Grosso","2":"2015","3":"15713","4":"15716","5":"3"},{"1":"Amapá","2":"2019","3":"2519","4":"2521","5":"2"},{"1":"Distrito Federal","2":"2019","3":"14861","4":"14863","5":"2"},{"1":"Pernambuco","2":"2017","3":"58513","4":"58515","5":"2"},{"1":"Piauí","2":"2017","3":"5769","4":"5771","5":"2"},{"1":"São Paulo","2":"2017","3":"299240","4":"299242","5":"2"},{"1":"Sergipe","2":"2016","3":"12327","4":"12329","5":"2"},{"1":"Amapá","2":"2017","3":"2263","4":"2264","5":"1"},{"1":"Amazonas","2":"2018","3":"6666","4":"6667","5":"1"},{"1":"Distrito Federal","2":"2017","3":"14395","4":"14396","5":"1"},{"1":"Maranhão","2":"2017","3":"5955","4":"5956","5":"1"},{"1":"Mato Grosso do Sul","2":"2020","3":"6723","4":"6724","5":"1"},{"1":"Pará","2":"2016","3":"10527","4":"10526","5":"1"},{"1":"Paraná","2":"2016","3":"75251","4":"75250","5":"1"},{"1":"Pernambuco","2":"2018","3":"59449","4":"59450","5":"1"},{"1":"Piauí","2":"2015","3":"2668","4":"2669","5":"1"},{"1":"Rio Grande do Sul","2":"2017","3":"47048","4":"47049","5":"1"},{"1":"Santa Catarina","2":"2019","3":"41512","4":"41513","5":"1"},{"1":"Sergipe","2":"2018","3":"12602","4":"12603","5":"1"},{"1":"Sergipe","2":"2019","3":"12616","4":"12617","5":"1"},{"1":"Tocantins","2":"2016","3":"4102","4":"4101","5":"1"},{"1":"Tocantins","2":"2019","3":"5960","4":"5961","5":"1"},{"1":"Tocantins","2":"2020","3":"2648","4":"2649","5":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<pre><code>## # A tibble: 118 x 5
+## # Groups:   Estado [26]
+##    Estado                Ano cities cities_summary delta_abs
+##    &lt;chr&gt;               &lt;dbl&gt;  &lt;dbl&gt;          &lt;dbl&gt;     &lt;dbl&gt;
+##  1 Ceará                2016  26632          26881       249
+##  2 Amapá                2018   2110           2324       214
+##  3 Pará                 2020  14294          14502       208
+##  4 Ceará                2020  24356          24561       205
+##  5 Paraíba              2015  17651          17843       192
+##  6 Goiás                2015  22956          23143       187
+##  7 Amazonas             2015   2481           2656       175
+##  8 Paraíba              2016  21107          21270       163
+##  9 Paraíba              2017  22488          22648       160
+## 10 Rio Grande do Norte  2016   7802           7957       155
+## # … with 108 more rows</code></pre>
 <pre class="r"><code>ggplot(combined_cities) + geom_histogram(aes(delta_abs), binwidth = 10)</code></pre>
-<p><img src="sanity_checks_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
-<p><strong>States monthly aggregation vs states yearly summary</strong></p>
-<pre class="r"><code>sma &lt;- states_df %&gt;%
+<p><img src="sanity_checks_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+</div>
+<div id="tabela-by_state_monthly-vs-by_state_yearly" class="section level2">
+<h2>Tabela <em>by_state_monthly</em> vs <em>by_state_yearly</em></h2>
+<pre class="r"><code>sma &lt;- by_state_monthly %&gt;%
   group_by(Estado, Ano) %&gt;%
-  summarise(Registros = sum(Registros))</code></pre>
-<pre><code>## `summarise()` regrouping output by &#39;Estado&#39; (override with `.groups` argument)</code></pre>
-<pre class="r"><code>sysa &lt;- states_summary_df %&gt;%
+  summarise(Registros = sum(Registros))
+
+sysa &lt;- by_state_yearly %&gt;%
   select(Estado, Ano, Registros)
 
 (combined_states &lt;- 
@@ -719,40 +637,56 @@ yearly_aggregate &lt;- function(df) {
     pivot_wider(names_from = origin_table, values_from = Registros) %&gt;%
     mutate(delta_abs = abs(states_summary - states))
 )</code></pre>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["Estado"],"name":[1],"type":["chr"],"align":["left"]},{"label":["Ano"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["states"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["states_summary"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["delta_abs"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"Acre","2":"2015","3":"2524","4":"2524","5":"0"},{"1":"Acre","2":"2016","3":"2486","4":"2486","5":"0"},{"1":"Acre","2":"2017","3":"3809","4":"3809","5":"0"},{"1":"Acre","2":"2018","3":"3909","4":"3909","5":"0"},{"1":"Acre","2":"2019","3":"3804","4":"3804","5":"0"},{"1":"Acre","2":"2020","3":"1999","4":"2004","5":"5"},{"1":"Alagoas","2":"2015","3":"7000","4":"7000","5":"0"},{"1":"Alagoas","2":"2016","3":"10560","4":"10560","5":"0"},{"1":"Alagoas","2":"2017","3":"11092","4":"11092","5":"0"},{"1":"Alagoas","2":"2018","3":"13579","4":"13579","5":"0"},{"1":"Alagoas","2":"2019","3":"16583","4":"16583","5":"0"},{"1":"Alagoas","2":"2020","3":"8688","4":"8885","5":"197"},{"1":"Amapá","2":"2015","3":"1989","4":"1989","5":"0"},{"1":"Amapá","2":"2016","3":"1888","4":"1888","5":"0"},{"1":"Amapá","2":"2017","3":"2263","4":"2263","5":"0"},{"1":"Amapá","2":"2018","3":"2143","4":"2143","5":"0"},{"1":"Amapá","2":"2019","3":"2521","4":"2521","5":"0"},{"1":"Amapá","2":"2020","3":"1099","4":"1099","5":"0"},{"1":"Amazonas","2":"2015","3":"2542","4":"2542","5":"0"},{"1":"Amazonas","2":"2016","3":"3768","4":"3768","5":"0"},{"1":"Amazonas","2":"2017","3":"4657","4":"4657","5":"0"},{"1":"Amazonas","2":"2018","3":"6667","4":"6667","5":"0"},{"1":"Amazonas","2":"2019","3":"13976","4":"13976","5":"0"},{"1":"Amazonas","2":"2020","3":"9783","4":"9783","5":"0"},{"1":"Bahia","2":"2015","3":"28580","4":"28580","5":"0"},{"1":"Bahia","2":"2016","3":"31135","4":"31135","5":"0"},{"1":"Bahia","2":"2017","3":"39362","4":"39362","5":"0"},{"1":"Bahia","2":"2018","3":"56830","4":"56830","5":"0"},{"1":"Bahia","2":"2019","3":"64766","4":"64766","5":"0"},{"1":"Bahia","2":"2020","3":"28335","4":"28551","5":"216"},{"1":"Ceará","2":"2015","3":"8169","4":"8169","5":"0"},{"1":"Ceará","2":"2016","3":"26640","4":"26640","5":"0"},{"1":"Ceará","2":"2017","3":"37535","4":"37535","5":"0"},{"1":"Ceará","2":"2018","3":"40401","4":"40401","5":"0"},{"1":"Ceará","2":"2019","3":"41199","4":"41199","5":"0"},{"1":"Ceará","2":"2020","3":"24396","4":"24561","5":"165"},{"1":"Distrito Federal","2":"2015","3":"13897","4":"13897","5":"0"},{"1":"Distrito Federal","2":"2016","3":"13983","4":"13983","5":"0"},{"1":"Distrito Federal","2":"2017","3":"14396","4":"14396","5":"0"},{"1":"Distrito Federal","2":"2018","3":"14352","4":"14352","5":"0"},{"1":"Distrito Federal","2":"2019","3":"14863","4":"14863","5":"0"},{"1":"Distrito Federal","2":"2020","3":"6602","4":"6602","5":"0"},{"1":"Espírito Santo","2":"2015","3":"22555","4":"22555","5":"0"},{"1":"Espírito Santo","2":"2016","3":"23296","4":"23296","5":"0"},{"1":"Espírito Santo","2":"2017","3":"24431","4":"24431","5":"0"},{"1":"Espírito Santo","2":"2018","3":"23778","4":"23778","5":"0"},{"1":"Espírito Santo","2":"2019","3":"24756","4":"24756","5":"0"},{"1":"Espírito Santo","2":"2020","3":"11827","4":"11829","5":"2"},{"1":"Goiás","2":"2015","3":"23143","4":"23143","5":"0"},{"1":"Goiás","2":"2016","3":"24639","4":"24639","5":"0"},{"1":"Goiás","2":"2017","3":"28620","4":"28620","5":"0"},{"1":"Goiás","2":"2018","3":"30616","4":"30616","5":"0"},{"1":"Goiás","2":"2019","3":"32234","4":"32234","5":"0"},{"1":"Goiás","2":"2020","3":"14196","4":"14264","5":"68"},{"1":"Maranhão","2":"2015","3":"2036","4":"2036","5":"0"},{"1":"Maranhão","2":"2016","3":"5121","4":"5121","5":"0"},{"1":"Maranhão","2":"2017","3":"5956","4":"5956","5":"0"},{"1":"Maranhão","2":"2018","3":"13849","4":"13849","5":"0"},{"1":"Maranhão","2":"2019","3":"20374","4":"20374","5":"0"},{"1":"Maranhão","2":"2020","3":"11400","4":"11460","5":"60"},{"1":"Mato Grosso","2":"2015","3":"15713","4":"15713","5":"0"},{"1":"Mato Grosso","2":"2016","3":"14953","4":"14953","5":"0"},{"1":"Mato Grosso","2":"2017","3":"16249","4":"16249","5":"0"},{"1":"Mato Grosso","2":"2018","3":"15325","4":"15325","5":"0"},{"1":"Mato Grosso","2":"2019","3":"13510","4":"13510","5":"0"},{"1":"Mato Grosso","2":"2020","3":"5766","4":"5783","5":"17"},{"1":"Mato Grosso do Sul","2":"2015","3":"7533","4":"7533","5":"0"},{"1":"Mato Grosso do Sul","2":"2016","3":"14609","4":"14609","5":"0"},{"1":"Mato Grosso do Sul","2":"2017","3":"14454","4":"14454","5":"0"},{"1":"Mato Grosso do Sul","2":"2018","3":"15498","4":"15498","5":"0"},{"1":"Mato Grosso do Sul","2":"2019","3":"16124","4":"16124","5":"0"},{"1":"Mato Grosso do Sul","2":"2020","3":"6723","4":"6724","5":"1"},{"1":"Minas Gerais","2":"2015","3":"119590","4":"119590","5":"0"},{"1":"Minas Gerais","2":"2016","3":"134607","4":"134607","5":"0"},{"1":"Minas Gerais","2":"2017","3":"136705","4":"136705","5":"0"},{"1":"Minas Gerais","2":"2018","3":"128506","4":"128506","5":"0"},{"1":"Minas Gerais","2":"2019","3":"123437","4":"123437","5":"0"},{"1":"Minas Gerais","2":"2020","3":"54672","4":"54751","5":"79"},{"1":"Pará","2":"2015","3":"3805","4":"3805","5":"0"},{"1":"Pará","2":"2016","3":"10526","4":"10526","5":"0"},{"1":"Pará","2":"2017","3":"11119","4":"11119","5":"0"},{"1":"Pará","2":"2018","3":"16338","4":"16338","5":"0"},{"1":"Pará","2":"2019","3":"25578","4":"25578","5":"0"},{"1":"Pará","2":"2020","3":"14303","4":"14502","5":"199"},{"1":"Paraíba","2":"2015","3":"17843","4":"17843","5":"0"},{"1":"Paraíba","2":"2016","3":"21268","4":"21268","5":"0"},{"1":"Paraíba","2":"2017","3":"22648","4":"22648","5":"0"},{"1":"Paraíba","2":"2018","3":"25721","4":"25721","5":"0"},{"1":"Paraíba","2":"2019","3":"27012","4":"27012","5":"0"},{"1":"Paraíba","2":"2020","3":"12230","4":"12235","5":"5"},{"1":"Paraná","2":"2015","3":"71379","4":"71379","5":"0"},{"1":"Paraná","2":"2016","3":"75250","4":"75250","5":"0"},{"1":"Paraná","2":"2017","3":"72252","4":"72252","5":"0"},{"1":"Paraná","2":"2018","3":"73038","4":"73038","5":"0"},{"1":"Paraná","2":"2019","3":"69982","4":"69982","5":"0"},{"1":"Paraná","2":"2020","3":"30171","4":"30198","5":"27"},{"1":"Pernambuco","2":"2015","3":"50480","4":"50480","5":"0"},{"1":"Pernambuco","2":"2016","3":"56746","4":"56746","5":"0"},{"1":"Pernambuco","2":"2017","3":"58513","4":"58513","5":"0"},{"1":"Pernambuco","2":"2018","3":"59449","4":"59449","5":"0"},{"1":"Pernambuco","2":"2019","3":"61664","4":"61664","5":"0"},{"1":"Pernambuco","2":"2020","3":"32863","4":"32913","5":"50"},{"1":"Piauí","2":"2015","3":"2669","4":"2669","5":"0"},{"1":"Piauí","2":"2016","3":"7075","4":"7075","5":"0"},{"1":"Piauí","2":"2017","3":"5771","4":"5771","5":"0"},{"1":"Piauí","2":"2018","3":"10585","4":"10585","5":"0"},{"1":"Piauí","2":"2019","3":"14581","4":"14581","5":"0"},{"1":"Piauí","2":"2020","3":"5370","4":"5385","5":"15"},{"1":"Rio de Janeiro","2":"2015","3":"12550","4":"12550","5":"0"},{"1":"Rio de Janeiro","2":"2016","3":"27529","4":"27529","5":"0"},{"1":"Rio de Janeiro","2":"2017","3":"17414","4":"17414","5":"0"},{"1":"Rio de Janeiro","2":"2018","3":"66227","4":"66227","5":"0"},{"1":"Rio de Janeiro","2":"2019","3":"137615","4":"137615","5":"0"},{"1":"Rio de Janeiro","2":"2020","3":"69704","4":"69722","5":"18"},{"1":"Rio Grande do Norte","2":"2015","3":"3945","4":"3945","5":"0"},{"1":"Rio Grande do Norte","2":"2016","3":"7957","4":"7957","5":"0"},{"1":"Rio Grande do Norte","2":"2017","3":"10706","4":"10706","5":"0"},{"1":"Rio Grande do Norte","2":"2018","3":"13678","4":"13678","5":"0"},{"1":"Rio Grande do Norte","2":"2019","3":"16488","4":"16488","5":"0"},{"1":"Rio Grande do Norte","2":"2020","3":"7197","4":"7227","5":"30"},{"1":"Rio Grande do Sul","2":"2015","3":"32624","4":"32624","5":"0"},{"1":"Rio Grande do Sul","2":"2016","3":"34045","4":"34045","5":"0"},{"1":"Rio Grande do Sul","2":"2017","3":"47048","4":"47048","5":"0"},{"1":"Rio Grande do Sul","2":"2018","3":"73576","4":"73576","5":"0"},{"1":"Rio Grande do Sul","2":"2019","3":"89448","4":"89448","5":"0"},{"1":"Rio Grande do Sul","2":"2020","3":"36936","4":"36977","5":"41"},{"1":"Rondônia","2":"2015","3":"5482","4":"5482","5":"0"},{"1":"Rondônia","2":"2016","3":"7036","4":"7036","5":"0"},{"1":"Rondônia","2":"2017","3":"7300","4":"7300","5":"0"},{"1":"Rondônia","2":"2018","3":"7729","4":"7729","5":"0"},{"1":"Rondônia","2":"2019","3":"7856","4":"7856","5":"0"},{"1":"Rondônia","2":"2020","3":"3521","4":"3521","5":"0"},{"1":"Roraima","2":"2015","3":"870","4":"870","5":"0"},{"1":"Roraima","2":"2016","3":"1707","4":"1707","5":"0"},{"1":"Roraima","2":"2017","3":"1700","4":"1700","5":"0"},{"1":"Roraima","2":"2018","3":"2316","4":"2316","5":"0"},{"1":"Roraima","2":"2019","3":"2303","4":"2303","5":"0"},{"1":"Roraima","2":"2020","3":"1150","4":"1150","5":"0"},{"1":"Santa Catarina","2":"2015","3":"29671","4":"29671","5":"0"},{"1":"Santa Catarina","2":"2016","3":"33289","4":"33289","5":"0"},{"1":"Santa Catarina","2":"2017","3":"36094","4":"36094","5":"0"},{"1":"Santa Catarina","2":"2018","3":"40128","4":"40128","5":"0"},{"1":"Santa Catarina","2":"2019","3":"41513","4":"41513","5":"0"},{"1":"Santa Catarina","2":"2020","3":"17673","4":"17695","5":"22"},{"1":"São Paulo","2":"2015","3":"286739","4":"286739","5":"0"},{"1":"São Paulo","2":"2016","3":"299936","4":"299936","5":"0"},{"1":"São Paulo","2":"2017","3":"299240","4":"299240","5":"0"},{"1":"São Paulo","2":"2018","3":"302907","4":"302907","5":"0"},{"1":"São Paulo","2":"2019","3":"311562","4":"311562","5":"0"},{"1":"São Paulo","2":"2020","3":"148804","4":"148831","5":"27"},{"1":"Sergipe","2":"2015","3":"11112","4":"11112","5":"0"},{"1":"Sergipe","2":"2016","3":"12329","4":"12329","5":"0"},{"1":"Sergipe","2":"2017","3":"12763","4":"12763","5":"0"},{"1":"Sergipe","2":"2018","3":"12603","4":"12603","5":"0"},{"1":"Sergipe","2":"2019","3":"12616","4":"12616","5":"0"},{"1":"Sergipe","2":"2020","3":"5504","4":"5510","5":"6"},{"1":"Tocantins","2":"2015","3":"2860","4":"2860","5":"0"},{"1":"Tocantins","2":"2016","3":"4101","4":"4101","5":"0"},{"1":"Tocantins","2":"2017","3":"4972","4":"4972","5":"0"},{"1":"Tocantins","2":"2018","3":"5978","4":"5978","5":"0"},{"1":"Tocantins","2":"2019","3":"5961","4":"5961","5":"0"},{"1":"Tocantins","2":"2020","3":"2648","4":"2649","5":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<pre><code>## # A tibble: 162 x 5
+## # Groups:   Estado [27]
+##    Estado    Ano states states_summary delta_abs
+##    &lt;chr&gt;   &lt;dbl&gt;  &lt;dbl&gt;          &lt;dbl&gt;     &lt;dbl&gt;
+##  1 Acre     2015   2524           2524         0
+##  2 Acre     2016   2486           2486         0
+##  3 Acre     2017   3809           3809         0
+##  4 Acre     2018   3909           3909         0
+##  5 Acre     2019   3804           3804         0
+##  6 Acre     2020   1999           2004         5
+##  7 Alagoas  2015   7000           7000         0
+##  8 Alagoas  2016  10560          10560         0
+##  9 Alagoas  2017  11092          11092         0
+## 10 Alagoas  2018  13579          13579         0
+## # … with 152 more rows</code></pre>
 <pre class="r"><code>summary(combined_states)</code></pre>
-<pre><code>##     Estado               Ano           states       states_summary  
-##  Length:162         Min.   :2015   Min.   :   870   Min.   :   870  
-##  Class :character   1st Qu.:2016   1st Qu.:  6681   1st Qu.:  6681  
-##  Mode  :character   Median :2018   Median : 14518   Median : 14542  
-##                     Mean   :2018   Mean   : 33966   Mean   : 33974  
-##                     3rd Qu.:2019   3rd Qu.: 32803   3rd Qu.: 32841  
-##                     Max.   :2020   Max.   :311562   Max.   :311562  
-##    delta_abs      
-##  Min.   :  0.000  
-##  1st Qu.:  0.000  
-##  Median :  0.000  
-##  Mean   :  7.722  
-##  3rd Qu.:  0.000  
-##  Max.   :216.000</code></pre>
+<pre><code>##     Estado               Ano           states       states_summary     delta_abs      
+##  Length:162         Min.   :2015   Min.   :   870   Min.   :   870   Min.   :  0.000  
+##  Class :character   1st Qu.:2016   1st Qu.:  6681   1st Qu.:  6681   1st Qu.:  0.000  
+##  Mode  :character   Median :2018   Median : 14518   Median : 14542   Median :  0.000  
+##                     Mean   :2018   Mean   : 33966   Mean   : 33974   Mean   :  7.722  
+##                     3rd Qu.:2019   3rd Qu.: 32803   3rd Qu.: 32841   3rd Qu.:  0.000  
+##                     Max.   :2020   Max.   :311562   Max.   :311562   Max.   :216.000</code></pre>
 <pre class="r"><code>combined_states %&gt;% 
   filter(delta_abs != 0) %&gt;%
   arrange(-delta_abs)</code></pre>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["Estado"],"name":[1],"type":["chr"],"align":["left"]},{"label":["Ano"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["states"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["states_summary"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["delta_abs"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"Bahia","2":"2020","3":"28335","4":"28551","5":"216"},{"1":"Pará","2":"2020","3":"14303","4":"14502","5":"199"},{"1":"Alagoas","2":"2020","3":"8688","4":"8885","5":"197"},{"1":"Ceará","2":"2020","3":"24396","4":"24561","5":"165"},{"1":"Minas Gerais","2":"2020","3":"54672","4":"54751","5":"79"},{"1":"Goiás","2":"2020","3":"14196","4":"14264","5":"68"},{"1":"Maranhão","2":"2020","3":"11400","4":"11460","5":"60"},{"1":"Pernambuco","2":"2020","3":"32863","4":"32913","5":"50"},{"1":"Rio Grande do Sul","2":"2020","3":"36936","4":"36977","5":"41"},{"1":"Rio Grande do Norte","2":"2020","3":"7197","4":"7227","5":"30"},{"1":"Paraná","2":"2020","3":"30171","4":"30198","5":"27"},{"1":"São Paulo","2":"2020","3":"148804","4":"148831","5":"27"},{"1":"Santa Catarina","2":"2020","3":"17673","4":"17695","5":"22"},{"1":"Rio de Janeiro","2":"2020","3":"69704","4":"69722","5":"18"},{"1":"Mato Grosso","2":"2020","3":"5766","4":"5783","5":"17"},{"1":"Piauí","2":"2020","3":"5370","4":"5385","5":"15"},{"1":"Sergipe","2":"2020","3":"5504","4":"5510","5":"6"},{"1":"Acre","2":"2020","3":"1999","4":"2004","5":"5"},{"1":"Paraíba","2":"2020","3":"12230","4":"12235","5":"5"},{"1":"Espírito Santo","2":"2020","3":"11827","4":"11829","5":"2"},{"1":"Mato Grosso do Sul","2":"2020","3":"6723","4":"6724","5":"1"},{"1":"Tocantins","2":"2020","3":"2648","4":"2649","5":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<pre><code>## # A tibble: 22 x 5
+## # Groups:   Estado [22]
+##    Estado                Ano states states_summary delta_abs
+##    &lt;chr&gt;               &lt;dbl&gt;  &lt;dbl&gt;          &lt;dbl&gt;     &lt;dbl&gt;
+##  1 Bahia                2020  28335          28551       216
+##  2 Pará                 2020  14303          14502       199
+##  3 Alagoas              2020   8688           8885       197
+##  4 Ceará                2020  24396          24561       165
+##  5 Minas Gerais         2020  54672          54751        79
+##  6 Goiás                2020  14196          14264        68
+##  7 Maranhão             2020  11400          11460        60
+##  8 Pernambuco           2020  32863          32913        50
+##  9 Rio Grande do Sul    2020  36936          36977        41
+## 10 Rio Grande do Norte  2020   7197           7227        30
+## # … with 12 more rows</code></pre>
 <pre class="r"><code>ggplot(combined_states) + geom_histogram(aes(delta_abs), binwidth = 10)</code></pre>
-<p><img src="sanity_checks_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p><img src="sanity_checks_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+</div>
 </div>
 
 
 
+</div>
+</div>
 
 </div>
 
@@ -785,6 +719,32 @@ $(document).ready(function () {
 
 <!-- code folding -->
 
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
