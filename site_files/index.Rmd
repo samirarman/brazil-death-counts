@@ -13,8 +13,6 @@ ggplot2::theme_set(theme_bw())
 
 Base de dados obtida do portal da transparência do Registro Civil, de 2015 até junho de 2020.
 
-Existe um atraso na alimentação do sistema que pode causar um atraso estimado em 15 dias.
-
 Os dados estão em nível municipal e estadual, mês a mês. Faça o download [aqui.](https://data.world/samirarman/brazil-death-data)
 
 O código-fonte utilizado para obter os dados está disponível [aqui.](https://github.com/samirarman/brazil-death-data)
