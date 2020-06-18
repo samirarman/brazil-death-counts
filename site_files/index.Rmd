@@ -22,7 +22,7 @@ O código-fonte utilizado para obter os dados está disponível [aqui.](https://
 **IMPORTANTE: Antes de usar os dados, faça as verificações estatísticas e tratamentos necessários!**
 
 
-# Tabelas disponíveis:
+# Tabelas disponíveis
 
 
 **- *by_city_monthly* **: Certidões de óbito emitidas em cada cidade, mês a mês, de janeiro de 2015 até junho de 2020. 
