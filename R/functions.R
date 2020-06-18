@@ -61,13 +61,13 @@ set_clean_state <-
            state_field) {
     year_field$sendKeysToElement(list("2020"))
     year_field$sendKeysToElement(list("", key = "enter"))
-    
+
     month_field$sendKeysToElement(list("Janeiro"))
     month_field$sendKeysToElement(list("", key = "enter"))
-    
+
     region_field$sendKeysToElement(list("Todas"))
     region_field$sendKeysToElement(list("", key = "enter"))
-    
+
     state_field$sendKeysToElement(list("Todos"))
     state_field$sendKeysToElement(list("", key = "enter"))
   }
@@ -75,34 +75,34 @@ set_clean_state <-
 scrape_deaths <-
   function(year, month, region, state, write = TRUE, path) {
     data <- tibble()
-    
+
     if (state != "Mato Grosso") {
       set_clean_state(year_field, month_field, region_field, state_field)
     }
-    
+
     year_field$sendKeysToElement(list(year))
     year_field$sendKeysToElement(list("", key = "enter"))
-    
+
     month_field$sendKeysToElement(list(month))
     month_field$sendKeysToElement(list("", key = "enter"))
-    
+
     region_field$sendKeysToElement(list(region))
     region_field$sendKeysToElement(list("", key = "enter"))
-    
+
     # Sending keys to Mato Grosso state won't work.
-    # When scraping Mato Grosso state, select it 
+    # When scraping Mato Grosso state, select it
     # manually on the website.
     if (state != "Mato Grosso") {
       state_field$sendKeysToElement(list(paste(state, " ", sep = "")))
       state_field$sendKeysToElement(list("", key = "enter"))
     }
     Sys.sleep(1)
-    
+
     search_btn$highlightElement()
     search_btn$clickElement()
     Sys.sleep(2)
-    
-    
+
+
     # if table is available and correct
     # scrape the first generated page
     if (!is_table_avail()) {
@@ -118,21 +118,21 @@ scrape_deaths <-
         bind_rows(data)
     }
     print(data)
-    
+
     # if the table has more pages,
     # cycle through the pages and
     # scrape the table
     while (is_next_btn_avail()) {
       print("Next button found")
-      
+
       next_btn <-
         rd$findElement(using = "xpath",
                        value = "//a[@aria-label= 'Goto next page']")
       next_btn$highlightElement()
       next_btn$clickElement()
-      
+
       print("clicking on next button")
-      
+
       if (!is_table_avail()) {
         wait_for_table()
       } else if (is_table_correct()) {
@@ -146,10 +146,10 @@ scrape_deaths <-
           bind_rows(data)
       }
     }
-    
+
     # Give feedback and write the csv file
     print(data)
-    
+
     if (write == TRUE) {
       file_name <- paste(path,
                          paste(year, month, state, sep = "-"),
