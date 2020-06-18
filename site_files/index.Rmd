@@ -1,30 +1,55 @@
 ---
-title: "Certidões de óbitos emitidas no Brasil"
+title: "Base de dados de óbitos do Portal da Transparência do Registro Civil"
 ---
-```{r echo = FALSE}
-loadd(cities_df)
-loadd(cities_summary_df)
-loadd(states_df)
-loadd(states_summary_df)
+```{r, echo = FALSE}
+loadd(by_city_monthly)
+loadd(by_city_yearly)
+loadd(by_state_monthly)
+loadd(by_state_yearly)
 ggplot2::theme_set(theme_bw())
 ```
-## Informações básicas
 
-Dados obtidos do portal da transparência do Registro Civil, de 2015 a 2020.
+# Introdução
 
-Os dados estão em nível municipal e estadual, mês a mês.
+Base de dados obtida do portal da transparência do Registro Civil, de 2015 até junho de 2020.
 
-Os dados conforme "raspados" do portal da transparência podem ser obtidos [aqui.](https://github.com/samirarman/brazil-death-data/tree/master/scraped_data)
+Existe um atraso na alimentação do sistema que pode causar um atraso estimado em 15 dias.
 
-As mesmas tabelas, porém unidas, podem ser obtidas [aqui.](https://github.com/samirarman/brazil-death-data/tree/master/merged_data)
+Os dados estão em nível municipal e estadual, mês a mês. Faça o download [aqui.](https://data.world/samirarman/brazil-death-data)
 
-Uma análise preliminar pode ser encontrada [aqui.](sanity_checks.html)
+O código-fonte utilizado para obter os dados está disponível [aqui.](https://github.com/samirarman/brazil-death-data)
 
-## Amostras dos dados
+**IMPORTANTE: Antes de usar os dados, faça as verificações estatísticas e tratamentos necessários!**
 
-### Por cidade, mês a mês
+
+# Tabelas disponíveis:
+
+
+**- *by_city_monthly* **: Certidões de óbito emitidas em cada cidade, mês a mês, de janeiro de 2015 até junho de 2020. 
+
+Corresponde a preencher os campos "Ano", "Mês" e "Estado" no portal do Registro Civil. Ex.: 2019, Janeiro, Todas, São Paulo.
+
+
+**- *by_city_yearly* **: Certidões de óbito emitidas em cada cidade, ano a ano, de 2015 até 2020. 
+
+Corresponde a preencher os campos  "Ano" e "Estado" no portal do Registro Civil. Ex.: 2019, Todos, Todas, São Paulo.
+
+
+**- *by_state_monthly* **: Certidões de óbito emitidas em cada estado brasileiro, mês a mês, de janeiro de 2015 até junho de 2020. 
+
+Corresponde a preencher os campos  "Ano" e "Mês" no portal do Registro Civil. Ex.: 2019, Janeiro, Todas, Todos.
+
+
+**- *by_state_yearly* **: Certidões de óbito emitidas em cada estado, ano a ano, de janeiro de 2015 até junho de 2020. 
+
+
+# Amostras dos dados
+
+
+## Por cidade, mês a mês (tabela *by_city_monthly*)
+
 ```{r echo = FALSE}
-data <- cities_df %>%
+data <- by_city_monthly %>%
     filter(Cidade == "São Paulo" & Estado == "São Paulo") %>%
     mutate(Ano = as.factor(Ano))
 
@@ -32,18 +57,23 @@ ggplot(data, aes(x = Mês, y = Registros, group = Ano)) +
     geom_point(aes(color = Ano)) +
     labs(title = "São Paulo - SP")
 ```
-### Por cidade, ano a ano
+
+
+## Por cidade, ano a ano (tabela *by_city_yearly*)
+
 ```{r echo = FALSE}
-data <- cities_summary_df %>%
+data <- by_city_yearly %>%
     filter(Cidade == "Rio de Janeiro" & Estado == "Rio de Janeiro")
 ggplot(data, aes(x = Ano, y = Registros)) +
     geom_line(color = "red") +
     labs(title = "Rio de Janeiro - RJ")
 ```
 
-### Por estado, mês a mes
+
+## Por estado, mês a mês (tabela *by_state_monthly*)
+
 ```{r echo = FALSE}
-data <- states_df %>%
+data <- by_state_monthly %>%
     filter(Estado == "Ceará") %>%
     mutate(Ano = as.factor(Ano))
 
@@ -52,12 +82,20 @@ ggplot(data, aes(x = Mês, y = Registros, group = Ano)) +
     labs(title = "Ceará")
 ```
 
-### Por estado, ano a ano
+
+## Por estado, ano a ano (tabela *by_state_yearly*)
+
 ```{r echo = FALSE}
-data <- states_summary_df %>%
+data <- by_state_yearly %>%
     filter(Estado == "Paraná")
 
 ggplot(data, aes(x = Ano, y = Registros)) +
     geom_line(color = "red") +
     labs(title = "Paraná")
+```
+
+
+# Pré-análise dos dados
+
+```{r,child="sanity_checks.Rmd"}
 ```

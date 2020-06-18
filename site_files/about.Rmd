@@ -2,4 +2,6 @@
 title: "Sobre"
 ---
 
-Em construção.
+Este projeto nasceu da carência de dados para estimar o chamado "excesso de mortes" durante a pandêmia da COVID-19 no Brasil.
+
+Apesar das limitações que a base de dados apresenta, em algumas cidades é possível ter a real dimensão dos danos causados pelo novo coronavírus.
