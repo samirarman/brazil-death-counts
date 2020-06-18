@@ -12,7 +12,8 @@ RUN R -e "options(repos = \
   install.packages('visNetwork'); \
   install.packages('stringi'); \
   install.packages('readxl'); \
-  install.packages('visNetwork')"
+  install.packages('visNetwork'); \
+  install.packages('DT')"
 
 RUN mkdir /home/brazil-death-data && \
  mkdir /home/brazil-death-data/.drake && \

@@ -26,8 +26,6 @@ make_place_key <- function(city, state) {
 ```
 
 
-# Nomes das cidades
-
 ## Nomes das cidades com problemas de grafia na tabela *by_cities_monthly*
 ```{r}
 master_table <-
@@ -68,10 +66,10 @@ c(pull(problem_names_c, key), pull(problem_names_cs, key)) %>% unique
 ```
 
 ```{r}
-list_df <- list(cities_table = by_city_monthly, 
-        cities_summary_table = by_city_yearly, 
-        states_table = by_state_monthly, 
-        states_summary_table = by_state_yearly)
+list_df <- list(city_monthly_table = by_city_monthly, 
+        cities_yearly_table = by_city_yearly, 
+        states_monthly_table = by_state_monthly, 
+        states_yearly_table = by_state_yearly)
     summary <- list_df %>%
         map(. %>% 
         group_by(Ano, Estado) %>% 
@@ -87,7 +85,7 @@ list_df <- list(cities_table = by_city_monthly,
     
 ```
 
-# Somas dos registros nas tabelas
+## Somas dos registros nas tabelas
 ```{r, echo=FALSE}
 # Define a helper function
 yearly_aggregate <- function(df) {
@@ -96,41 +94,47 @@ yearly_aggregate <- function(df) {
     summarise(Registros = sum(Registros))
 }
 ```
-## Tabela *by_city_monthly*
+
+### Tabela *by_city_monthly*
 
 ```{r}
-(ca <- yearly_aggregate(by_city_monthly))
+ca <- yearly_aggregate(by_city_monthly)
+DT::datatable(ca)
 ```
 
-## Tabela *by_city_yearly*
+### Tabela *by_city_yearly*
 ```{r}
-(csa <- yearly_aggregate(by_city_yearly))
+csa <- yearly_aggregate(by_city_yearly)
+DT::datatable(csa)
 ```
 
-## Tabela *by_state_monthly*
+### Tabela *by_state_monthly*
 
 ```{r}
-(sa <- yearly_aggregate(by_state_monthly))
+sa <- yearly_aggregate(by_state_monthly)
+DT::datatable(sa)
 ```
 
-## Tabela *by_state_monthly*
+### Tabela *by_state_monthly*
 
 ```{r}
-(ssa <- yearly_aggregate(by_state_yearly))
+ssa <- yearly_aggregate(by_state_yearly)
+DT::datatable(ssa)
 ```
 
-## Comparação entre tabelas
+### Comparação entre tabelas
 
 ```{r}
-bind_rows("cities" = ca, 
-          "cities_summary" = csa, 
-          "states" = sa, 
-          "states_summary" = ssa, 
+bind_rows("cities_monthly" = ca, 
+          "cities_yearly" = csa, 
+          "states_monthly" = sa, 
+          "states_yearly" = ssa, 
           .id = "origin_table") %>% 
-  pivot_wider(names_from = origin_table, values_from = Registros)
+  pivot_wider(names_from = origin_table, values_from = Registros) %>%
+  DT::datatable()
 ```
 
-## Tabela *by_city_monthly* vs *by_city_yearly*
+### Tabela *by_city_monthly* vs *by_city_yearly*
 
 ```{r}
 cma <- by_city_monthly %>%
@@ -143,22 +147,23 @@ cysa <- by_city_yearly %>%
   summarise(Registros = sum(Registros))
 
 
-(combined_cities <- 
+combined_cities <- 
     bind_rows("cities" = cma, "cities_summary" = cysa, .id = "origin_table") %>%
     pivot_wider(names_from = origin_table, values_from = Registros) %>%
     mutate(delta_abs = abs(cities_summary - cities))
-)
+
 
 summary(combined_cities)
 
 combined_cities %>% 
   filter(delta_abs != 0) %>%
-  arrange(-delta_abs)
+  arrange(-delta_abs) %>%
+  DT::datatable()
 
 ggplot(combined_cities) + geom_histogram(aes(delta_abs), binwidth = 10)
 ```
 
-## Tabela *by_state_monthly* vs *by_state_yearly*
+### Tabela *by_state_monthly* vs *by_state_yearly*
 
 ```{r}
 sma <- by_state_monthly %>%
@@ -168,17 +173,17 @@ sma <- by_state_monthly %>%
 sysa <- by_state_yearly %>%
   select(Estado, Ano, Registros)
 
-(combined_states <- 
+combined_states <- 
     bind_rows("states" = sma, "states_summary" = sysa, .id = "origin_table") %>%
     pivot_wider(names_from = origin_table, values_from = Registros) %>%
     mutate(delta_abs = abs(states_summary - states))
-)
 
 summary(combined_states)
 
 combined_states %>% 
   filter(delta_abs != 0) %>%
-  arrange(-delta_abs)
+  arrange(-delta_abs) %>%
+  DT::datatable()
 
 ggplot(combined_states) + geom_histogram(aes(delta_abs), binwidth = 10)
 ```

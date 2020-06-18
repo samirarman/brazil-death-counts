@@ -4,6 +4,8 @@ library(drake)
 library(tidyverse)
 library(readxl)
 library(visNetwork)
+library(DT)
+library(stringi)
 
 ibge_url <-
     "ftp://geoftp.ibge.gov.br/organizacao_do_territorio/estrutura_territorial/divisao_territorial/2019/DTB_2019.zip"
@@ -54,5 +56,5 @@ plan <- drake_plan(
 )
 
 print(plan)
-make(plan)
+make(plan, lock_envir = FALSE)
 visSave(vis_drake_graph(plan), "plan.html")

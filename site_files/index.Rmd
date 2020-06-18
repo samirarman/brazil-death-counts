@@ -1,7 +1,7 @@
 ---
 title: "Base de dados de óbitos do Portal da Transparência do Registro Civil"
 ---
-```{r, echo = FALSE}
+```{r, echo=FALSE}
 loadd(by_city_monthly)
 loadd(by_city_yearly)
 loadd(by_state_monthly)
@@ -51,7 +51,8 @@ Corresponde a preencher os campos  "Ano" e "Mês" no portal do Registro Civil. E
 ```{r echo = FALSE}
 data <- by_city_monthly %>%
     filter(Cidade == "São Paulo" & Estado == "São Paulo") %>%
-    mutate(Ano = as.factor(Ano))
+    mutate(Ano = as.factor(Ano),
+           Mês = factor(Mês, levels = MONTHS))
 
 ggplot(data, aes(x = Mês, y = Registros, group = Ano)) +
     geom_point(aes(color = Ano)) +
@@ -75,7 +76,8 @@ ggplot(data, aes(x = Ano, y = Registros)) +
 ```{r echo = FALSE}
 data <- by_state_monthly %>%
     filter(Estado == "Ceará") %>%
-    mutate(Ano = as.factor(Ano))
+    mutate(Ano = as.factor(Ano),
+           Mês = factor(Mês, levels = MONTHS))
 
 ggplot(data, aes(x = Mês, y = Registros, group = Ano)) +
     geom_point(aes(color = Ano)) +
