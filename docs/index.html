@@ -11,14 +11,17 @@
 
 
 
-<title>Certidões de óbitos emitidas no Brasil</title>
+<title>Base de dados de óbitos do Portal da Transparência do Registro Civil</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -102,33 +105,33 @@ summary {
 <style type="text/css">
 /* padding for bootstrap navbar */
 body {
-  padding-top: 51px;
+  padding-top: 60px;
   padding-bottom: 40px;
 }
 /* offset scroll position for anchor links (for fixed navbar)  */
 .section h1 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 65px;
+  margin-top: -65px;
 }
 .section h2 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 65px;
+  margin-top: -65px;
 }
 .section h3 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 65px;
+  margin-top: -65px;
 }
 .section h4 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 65px;
+  margin-top: -65px;
 }
 .section h5 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 65px;
+  margin-top: -65px;
 }
 .section h6 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 65px;
+  margin-top: -65px;
 }
 .dropdown-submenu {
   position: relative;
@@ -248,6 +251,69 @@ $(document).ready(function () {
 
 
 
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
 
 </head>
 
@@ -255,6 +321,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -271,7 +347,9 @@ $(document).ready(function () {
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        
+        <li>
+  <a href="index.html">Home</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -286,37 +364,369 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Certidões de óbitos emitidas no Brasil</h1>
+<h1 class="title toc-ignore">Base de dados de óbitos do Portal da Transparência do Registro Civil</h1>
 
 </div>
 
 
-<div id="informações-básicas" class="section level2">
-<h2>Informações básicas</h2>
-<p>Dados obtidos do portal da transparência do Registro Civil, de 2015 a 2020.</p>
-<p>Os dados estão em nível municipal e estadual, mês a mês.</p>
-<p>Os dados conforme &quot;raspados&quot; do portal da transparência podem ser obtidos <a href="https://github.com/samirarman/brazil-death-data/tree/master/scraped_data">aqui.</a></p>
-<p>As mesmas tabelas, porém unidas, podem ser obtidas <a href="https://github.com/samirarman/brazil-death-data/tree/master/merged_data">aqui.</a></p>
-<p>Uma análise preliminar pode ser encontrada <a href="sanity_checks.html">aqui.</a></p>
+<div id="introdução" class="section level1">
+<h1>Introdução</h1>
+<p>Base de dados obtida do portal da transparência do Registro Civil, de 2015 até junho de 2020.</p>
+<p>Existe um atraso na alimentação do sistema que pode causar um atraso estimado em 15 dias.</p>
+<p>Os dados estão em nível municipal e estadual, mês a mês. Faça o download <a href="https://data.world/samirarman/brazil-death-data">aqui.</a></p>
+<p>O código-fonte utilizado para obter os dados está disponível <a href="https://github.com/samirarman/brazil-death-data">aqui.</a></p>
+<p><strong>IMPORTANTE: Antes de usar os dados, faça as verificações estatísticas e tratamentos necessários!</strong></p>
 </div>
-<div id="amostras-dos-dados" class="section level2">
-<h2>Amostras dos dados</h2>
-<div id="por-cidade-mês-a-mês" class="section level3">
-<h3>Por cidade, mês a mês</h3>
-<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" width="672" /> ### Por cidade, ano a ano <img src="index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<div id="tabelas-disponíveis" class="section level1">
+<h1>Tabelas disponíveis:</h1>
+<p><strong>- <em>by_city_monthly</em> </strong>: Certidões de óbito emitidas em cada cidade, mês a mês, de janeiro de 2015 até junho de 2020.</p>
+<p>Corresponde a preencher os campos “Ano”, “Mês” e “Estado” no portal do Registro Civil. Ex.: 2019, Janeiro, Todas, São Paulo.</p>
+<p><strong>- <em>by_city_yearly</em> </strong>: Certidões de óbito emitidas em cada cidade, ano a ano, de 2015 até 2020.</p>
+<p>Corresponde a preencher os campos “Ano” e “Estado” no portal do Registro Civil. Ex.: 2019, Todos, Todas, São Paulo.</p>
+<p><strong>- <em>by_state_monthly</em> </strong>: Certidões de óbito emitidas em cada estado brasileiro, mês a mês, de janeiro de 2015 até junho de 2020.</p>
+<p>Corresponde a preencher os campos “Ano” e “Mês” no portal do Registro Civil. Ex.: 2019, Janeiro, Todas, Todos.</p>
+<p><strong>- <em>by_state_yearly</em> </strong>: Certidões de óbito emitidas em cada estado, ano a ano, de janeiro de 2015 até junho de 2020.</p>
 </div>
-<div id="por-estado-mês-a-mes" class="section level3">
-<h3>Por estado, mês a mes</h3>
+<div id="amostras-dos-dados" class="section level1">
+<h1>Amostras dos dados</h1>
+<div id="por-cidade-mês-a-mês-tabela-by_city_monthly" class="section level2">
+<h2>Por cidade, mês a mês (tabela <em>by_city_monthly</em>)</h2>
+<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+</div>
+<div id="por-cidade-ano-a-ano-tabela-by_city_yearly" class="section level2">
+<h2>Por cidade, ano a ano (tabela <em>by_city_yearly</em>)</h2>
+<p><img src="index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+</div>
+<div id="por-estado-mês-a-mês-tabela-by_state_monthly" class="section level2">
+<h2>Por estado, mês a mês (tabela <em>by_state_monthly</em>)</h2>
 <p><img src="index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 </div>
-<div id="por-estado-ano-a-ano" class="section level3">
-<h3>Por estado, ano a ano</h3>
+<div id="por-estado-ano-a-ano-tabela-by_state_yearly" class="section level2">
+<h2>Por estado, ano a ano (tabela <em>by_state_yearly</em>)</h2>
 <p><img src="index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 </div>
 </div>
+<div id="pré-análise-dos-dados" class="section level1">
+<h1>Pré-análise dos dados</h1>
+</div>
+<div id="nomes-das-cidades" class="section level1">
+<h1>Nomes das cidades</h1>
+<div id="nomes-das-cidades-com-problemas-de-grafia-na-tabela-by_cities_monthly" class="section level2">
+<h2>Nomes das cidades com problemas de grafia na tabela <em>by_cities_monthly</em></h2>
+<pre class="r"><code>master_table &lt;-
+  ibge_data %&gt;%
+  mutate(key = squash_string(
+    make_place_key(
+      Nome_Município,
+      Nome_UF
+    )
+  ))
+
+problem_names_c &lt;- by_city_monthly %&gt;%
+    mutate(key = squash_string(make_place_key(Cidade, Estado))) %&gt;%
+    mutate(exists = key %in% master_table$key) %&gt;%
+    filter(exists == FALSE) 
+
+
+# Pull unique values
+(problem_names_c %&gt;% pull(key) %&gt;% unique)</code></pre>
+<pre><code>##  [1] &quot;brazlandia - distrito federal&quot;             &quot;ceilandia - distrito federal&quot;             
+##  [3] &quot;gama - distrito federal&quot;                   &quot;guara - distrito federal&quot;                 
+##  [5] &quot;nucleo bandeirantes - distrito federal&quot;    &quot;paranoa - distrito federal&quot;               
+##  [7] &quot;planaltina - distrito federal&quot;             &quot;samambaia - distrito federal&quot;             
+##  [9] &quot;sobradinho - distrito federal&quot;             &quot;taguatinga - distrito federal&quot;            
+## [11] &quot;senador la roque - maranhao&quot;               &quot;governador edson lobao - maranhao&quot;        
+## [13] &quot;poxoreo - mato grosso&quot;                     &quot;sao thome das letras - minas gerais&quot;      
+## [15] &quot;brasopolis - minas gerais&quot;                 &quot;santarem - paraiba&quot;                       
+## [17] &quot;lagoa do itaenga - pernambuco&quot;             &quot;iguaraci - pernambuco&quot;                    
+## [19] &quot;santana do livramento - rio grande do sul&quot; &quot;espigao do oeste - rondonia&quot;              
+## [21] &quot;biritiba-mirim - sao paulo&quot;                &quot;sao valerio da natividade - tocantins&quot;    
+## [23] &quot;fortaleza do tabocao - tocantins&quot;          &quot;parati - rio de janeiro&quot;                  
+## [25] &quot;olhos d&#39;agua - minas gerais&quot;               &quot;sem peixe - minas gerais&quot;                 
+## [27] &quot;amparo da serra - minas gerais&quot;            &quot;florinia - sao paulo&quot;                     
+## [29] &quot;serido - paraiba&quot;                          &quot;graccho cardoso - sergipe&quot;                
+## [31] &quot;arez - rio grande do norte&quot;                &quot;couto de magalhaes - tocantins&quot;           
+## [33] &quot;eldorado dos carajas - para&quot;               &quot;jequirica - bahia&quot;                        
+## [35] &quot;santa isabel do para - para&quot;               &quot;campo de santana - paraiba&quot;</code></pre>
+</div>
+<div id="nomes-das-cidades-com-problemas-de-grafia-na-tabela-by_cities_yearly" class="section level2">
+<h2>Nomes das cidades com problemas de grafia na tabela <em>by_cities_yearly</em></h2>
+<pre class="r"><code>problem_names_cs &lt;- by_city_yearly %&gt;%
+   mutate(key = squash_string(make_place_key(Cidade, Estado))) %&gt;%
+   mutate(exists = key %in% master_table$key) %&gt;%
+   filter(exists == FALSE) 
+
+# Pull unique values
+(problem_names_cs %&gt;% pull(key) %&gt;% unique)</code></pre>
+<pre><code>##  [1] &quot;brazlandia - distrito federal&quot;             &quot;ceilandia - distrito federal&quot;             
+##  [3] &quot;gama - distrito federal&quot;                   &quot;guara - distrito federal&quot;                 
+##  [5] &quot;nucleo bandeirantes - distrito federal&quot;    &quot;paranoa - distrito federal&quot;               
+##  [7] &quot;planaltina - distrito federal&quot;             &quot;samambaia - distrito federal&quot;             
+##  [9] &quot;sobradinho - distrito federal&quot;             &quot;taguatinga - distrito federal&quot;            
+## [11] &quot;senador la roque - maranhao&quot;               &quot;governador edson lobao - maranhao&quot;        
+## [13] &quot;poxoreo - mato grosso&quot;                     &quot;sao thome das letras - minas gerais&quot;      
+## [15] &quot;sem peixe - minas gerais&quot;                  &quot;olhos d&#39;agua - minas gerais&quot;              
+## [17] &quot;brasopolis - minas gerais&quot;                 &quot;amparo da serra - minas gerais&quot;           
+## [19] &quot;santarem - paraiba&quot;                        &quot;lagoa do itaenga - pernambuco&quot;            
+## [21] &quot;iguaraci - pernambuco&quot;                     &quot;parati - rio de janeiro&quot;                  
+## [23] &quot;santana do livramento - rio grande do sul&quot; &quot;espigao do oeste - rondonia&quot;              
+## [25] &quot;florinia - sao paulo&quot;                      &quot;biritiba-mirim - sao paulo&quot;               
+## [27] &quot;sao valerio da natividade - tocantins&quot;     &quot;fortaleza do tabocao - tocantins&quot;         
+## [29] &quot;serido - paraiba&quot;                          &quot;arez - rio grande do norte&quot;               
+## [31] &quot;graccho cardoso - sergipe&quot;                 &quot;couto de magalhaes - tocantins&quot;           
+## [33] &quot;eldorado dos carajas - para&quot;               &quot;jequirica - bahia&quot;                        
+## [35] &quot;campo de santana - paraiba&quot;                &quot;santa isabel do para - para&quot;</code></pre>
+</div>
+<div id="todos-os-nomes-das-cidades-com-problemas-de-grafia" class="section level2">
+<h2>Todos os nomes das cidades com problemas de grafia</h2>
+<pre class="r"><code>c(pull(problem_names_c, key), pull(problem_names_cs, key)) %&gt;% unique</code></pre>
+<pre><code>##  [1] &quot;brazlandia - distrito federal&quot;             &quot;ceilandia - distrito federal&quot;             
+##  [3] &quot;gama - distrito federal&quot;                   &quot;guara - distrito federal&quot;                 
+##  [5] &quot;nucleo bandeirantes - distrito federal&quot;    &quot;paranoa - distrito federal&quot;               
+##  [7] &quot;planaltina - distrito federal&quot;             &quot;samambaia - distrito federal&quot;             
+##  [9] &quot;sobradinho - distrito federal&quot;             &quot;taguatinga - distrito federal&quot;            
+## [11] &quot;senador la roque - maranhao&quot;               &quot;governador edson lobao - maranhao&quot;        
+## [13] &quot;poxoreo - mato grosso&quot;                     &quot;sao thome das letras - minas gerais&quot;      
+## [15] &quot;brasopolis - minas gerais&quot;                 &quot;santarem - paraiba&quot;                       
+## [17] &quot;lagoa do itaenga - pernambuco&quot;             &quot;iguaraci - pernambuco&quot;                    
+## [19] &quot;santana do livramento - rio grande do sul&quot; &quot;espigao do oeste - rondonia&quot;              
+## [21] &quot;biritiba-mirim - sao paulo&quot;                &quot;sao valerio da natividade - tocantins&quot;    
+## [23] &quot;fortaleza do tabocao - tocantins&quot;          &quot;parati - rio de janeiro&quot;                  
+## [25] &quot;olhos d&#39;agua - minas gerais&quot;               &quot;sem peixe - minas gerais&quot;                 
+## [27] &quot;amparo da serra - minas gerais&quot;            &quot;florinia - sao paulo&quot;                     
+## [29] &quot;serido - paraiba&quot;                          &quot;graccho cardoso - sergipe&quot;                
+## [31] &quot;arez - rio grande do norte&quot;                &quot;couto de magalhaes - tocantins&quot;           
+## [33] &quot;eldorado dos carajas - para&quot;               &quot;jequirica - bahia&quot;                        
+## [35] &quot;santa isabel do para - para&quot;               &quot;campo de santana - paraiba&quot;</code></pre>
+<pre class="r"><code>list_df &lt;- list(cities_table = by_city_monthly, 
+        cities_summary_table = by_city_yearly, 
+        states_table = by_state_monthly, 
+        states_summary_table = by_state_yearly)
+    summary &lt;- list_df %&gt;%
+        map(. %&gt;% 
+        group_by(Ano, Estado) %&gt;% 
+        summarise(Registros = sum(Registros))
+        )
+    for (i in seq_along(summary)) {
+        summary[[i]]$table &lt;- rep(names(summary[i]), nrow(summary[[i]]))
+    }
+    summary %&gt;% 
+        bind_rows %&gt;% 
+        pivot_wider(names_from = table, values_from = Registros)</code></pre>
+<pre><code>## # A tibble: 162 x 6
+## # Groups:   Ano [6]
+##      Ano Estado           cities_table cities_summary_table states_table states_summary_table
+##    &lt;dbl&gt; &lt;chr&gt;                   &lt;dbl&gt;                &lt;dbl&gt;        &lt;dbl&gt;                &lt;dbl&gt;
+##  1  2015 Acre                     2524                 2524         2524                 2524
+##  2  2015 Alagoas                  7369                 7369         7000                 7000
+##  3  2015 Amapá                    1978                 1991         1989                 1989
+##  4  2015 Amazonas                 2481                 2656         2542                 2542
+##  5  2015 Bahia                   29777                29777        28580                28580
+##  6  2015 Ceará                    8597                 8597         8169                 8169
+##  7  2015 Distrito Federal        13854                13897        13897                13897
+##  8  2015 Espírito Santo          22476                22555        22555                22555
+##  9  2015 Goiás                   22956                23143        23143                23143
+## 10  2015 Maranhão                 2033                 2036         2036                 2036
+## # … with 152 more rows</code></pre>
+</div>
+</div>
+<div id="somas-dos-registros-nas-tabelas" class="section level1">
+<h1>Somas dos registros nas tabelas</h1>
+<div id="tabela-by_city_monthly" class="section level2">
+<h2>Tabela <em>by_city_monthly</em></h2>
+<pre class="r"><code>(ca &lt;- yearly_aggregate(by_city_monthly))</code></pre>
+<pre><code>## # A tibble: 6 x 2
+##     Ano Registros
+##   &lt;dbl&gt;     &lt;dbl&gt;
+## 1  2015    788531
+## 2  2016    913829
+## 3  2017    947620
+## 4  2018   1078841
+## 5  2019   1213073
+## 6  2020    573725</code></pre>
+</div>
+<div id="tabela-by_city_yearly" class="section level2">
+<h2>Tabela <em>by_city_yearly</em></h2>
+<pre class="r"><code>(csa &lt;- yearly_aggregate(by_city_yearly))</code></pre>
+<pre><code>## # A tibble: 6 x 2
+##     Ano Registros
+##   &lt;dbl&gt;     &lt;dbl&gt;
+## 1  2015    789647
+## 2  2016    914655
+## 3  2017    948373
+## 4  2018   1079757
+## 5  2019   1213573
+## 6  2020    574811</code></pre>
+</div>
+<div id="tabela-by_state_monthly" class="section level2">
+<h2>Tabela <em>by_state_monthly</em></h2>
+<pre class="r"><code>(sa &lt;- yearly_aggregate(by_state_monthly))</code></pre>
+<pre><code>## # A tibble: 6 x 2
+##     Ano Registros
+##   &lt;dbl&gt;     &lt;dbl&gt;
+## 1  2015    787300
+## 2  2016    906479
+## 3  2017    947069
+## 4  2018   1075726
+## 5  2019   1212326
+## 6  2020    573560</code></pre>
+</div>
+<div id="tabela-by_state_monthly-1" class="section level2">
+<h2>Tabela <em>by_state_monthly</em></h2>
+<pre class="r"><code>(ssa &lt;- yearly_aggregate(by_state_yearly))</code></pre>
+<pre><code>## # A tibble: 6 x 2
+##     Ano Registros
+##   &lt;dbl&gt;     &lt;dbl&gt;
+## 1  2015    787300
+## 2  2016    906479
+## 3  2017    947069
+## 4  2018   1075726
+## 5  2019   1212326
+## 6  2020    574811</code></pre>
+</div>
+<div id="comparação-entre-tabelas" class="section level2">
+<h2>Comparação entre tabelas</h2>
+<pre class="r"><code>bind_rows(&quot;cities&quot; = ca, 
+          &quot;cities_summary&quot; = csa, 
+          &quot;states&quot; = sa, 
+          &quot;states_summary&quot; = ssa, 
+          .id = &quot;origin_table&quot;) %&gt;% 
+  pivot_wider(names_from = origin_table, values_from = Registros)</code></pre>
+<pre><code>## # A tibble: 6 x 5
+##     Ano  cities cities_summary  states states_summary
+##   &lt;dbl&gt;   &lt;dbl&gt;          &lt;dbl&gt;   &lt;dbl&gt;          &lt;dbl&gt;
+## 1  2015  788531         789647  787300         787300
+## 2  2016  913829         914655  906479         906479
+## 3  2017  947620         948373  947069         947069
+## 4  2018 1078841        1079757 1075726        1075726
+## 5  2019 1213073        1213573 1212326        1212326
+## 6  2020  573725         574811  573560         574811</code></pre>
+</div>
+<div id="tabela-by_city_monthly-vs-by_city_yearly" class="section level2">
+<h2>Tabela <em>by_city_monthly</em> vs <em>by_city_yearly</em></h2>
+<pre class="r"><code>cma &lt;- by_city_monthly %&gt;%
+  group_by(Estado, Ano) %&gt;%
+  summarise(Registros = sum(Registros))
+
+cysa &lt;- by_city_yearly %&gt;%
+  select(Cidade, Estado, Ano, Registros) %&gt;%
+    group_by(Estado, Ano) %&gt;%
+  summarise(Registros = sum(Registros))
+
+
+(combined_cities &lt;- 
+    bind_rows(&quot;cities&quot; = cma, &quot;cities_summary&quot; = cysa, .id = &quot;origin_table&quot;) %&gt;%
+    pivot_wider(names_from = origin_table, values_from = Registros) %&gt;%
+    mutate(delta_abs = abs(cities_summary - cities))
+)</code></pre>
+<pre><code>## # A tibble: 162 x 5
+## # Groups:   Estado [27]
+##    Estado    Ano cities cities_summary delta_abs
+##    &lt;chr&gt;   &lt;dbl&gt;  &lt;dbl&gt;          &lt;dbl&gt;     &lt;dbl&gt;
+##  1 Acre     2015   2524           2524         0
+##  2 Acre     2016   2486           2486         0
+##  3 Acre     2017   3809           3809         0
+##  4 Acre     2018   3909           3909         0
+##  5 Acre     2019   3804           3804         0
+##  6 Acre     2020   1998           2004         6
+##  7 Alagoas  2015   7369           7369         0
+##  8 Alagoas  2016  10997          10997         0
+##  9 Alagoas  2017  11584          11584         0
+## 10 Alagoas  2018  14131          14131         0
+## # … with 152 more rows</code></pre>
+<pre class="r"><code>summary(combined_cities)</code></pre>
+<pre><code>##     Estado               Ano           cities       cities_summary     delta_abs     
+##  Length:162         Min.   :2015   Min.   :   870   Min.   :   870   Min.   :  0.00  
+##  Class :character   1st Qu.:2016   1st Qu.:  6680   1st Qu.:  6681   1st Qu.:  0.00  
+##  Mode  :character   Median :2018   Median : 14518   Median : 14542   Median :  8.00  
+##                     Mean   :2018   Mean   : 34047   Mean   : 34079   Mean   : 32.88  
+##                     3rd Qu.:2019   3rd Qu.: 32800   3rd Qu.: 32848   3rd Qu.: 36.00  
+##                     Max.   :2020   Max.   :311562   Max.   :311570   Max.   :249.00</code></pre>
+<pre class="r"><code>combined_cities %&gt;% 
+  filter(delta_abs != 0) %&gt;%
+  arrange(-delta_abs)</code></pre>
+<pre><code>## # A tibble: 118 x 5
+## # Groups:   Estado [26]
+##    Estado                Ano cities cities_summary delta_abs
+##    &lt;chr&gt;               &lt;dbl&gt;  &lt;dbl&gt;          &lt;dbl&gt;     &lt;dbl&gt;
+##  1 Ceará                2016  26632          26881       249
+##  2 Amapá                2018   2110           2324       214
+##  3 Pará                 2020  14294          14502       208
+##  4 Ceará                2020  24356          24561       205
+##  5 Paraíba              2015  17651          17843       192
+##  6 Goiás                2015  22956          23143       187
+##  7 Amazonas             2015   2481           2656       175
+##  8 Paraíba              2016  21107          21270       163
+##  9 Paraíba              2017  22488          22648       160
+## 10 Rio Grande do Norte  2016   7802           7957       155
+## # … with 108 more rows</code></pre>
+<pre class="r"><code>ggplot(combined_cities) + geom_histogram(aes(delta_abs), binwidth = 10)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+</div>
+<div id="tabela-by_state_monthly-vs-by_state_yearly" class="section level2">
+<h2>Tabela <em>by_state_monthly</em> vs <em>by_state_yearly</em></h2>
+<pre class="r"><code>sma &lt;- by_state_monthly %&gt;%
+  group_by(Estado, Ano) %&gt;%
+  summarise(Registros = sum(Registros))
+
+sysa &lt;- by_state_yearly %&gt;%
+  select(Estado, Ano, Registros)
+
+(combined_states &lt;- 
+    bind_rows(&quot;states&quot; = sma, &quot;states_summary&quot; = sysa, .id = &quot;origin_table&quot;) %&gt;%
+    pivot_wider(names_from = origin_table, values_from = Registros) %&gt;%
+    mutate(delta_abs = abs(states_summary - states))
+)</code></pre>
+<pre><code>## # A tibble: 162 x 5
+## # Groups:   Estado [27]
+##    Estado    Ano states states_summary delta_abs
+##    &lt;chr&gt;   &lt;dbl&gt;  &lt;dbl&gt;          &lt;dbl&gt;     &lt;dbl&gt;
+##  1 Acre     2015   2524           2524         0
+##  2 Acre     2016   2486           2486         0
+##  3 Acre     2017   3809           3809         0
+##  4 Acre     2018   3909           3909         0
+##  5 Acre     2019   3804           3804         0
+##  6 Acre     2020   1999           2004         5
+##  7 Alagoas  2015   7000           7000         0
+##  8 Alagoas  2016  10560          10560         0
+##  9 Alagoas  2017  11092          11092         0
+## 10 Alagoas  2018  13579          13579         0
+## # … with 152 more rows</code></pre>
+<pre class="r"><code>summary(combined_states)</code></pre>
+<pre><code>##     Estado               Ano           states       states_summary     delta_abs      
+##  Length:162         Min.   :2015   Min.   :   870   Min.   :   870   Min.   :  0.000  
+##  Class :character   1st Qu.:2016   1st Qu.:  6681   1st Qu.:  6681   1st Qu.:  0.000  
+##  Mode  :character   Median :2018   Median : 14518   Median : 14542   Median :  0.000  
+##                     Mean   :2018   Mean   : 33966   Mean   : 33974   Mean   :  7.722  
+##                     3rd Qu.:2019   3rd Qu.: 32803   3rd Qu.: 32841   3rd Qu.:  0.000  
+##                     Max.   :2020   Max.   :311562   Max.   :311562   Max.   :216.000</code></pre>
+<pre class="r"><code>combined_states %&gt;% 
+  filter(delta_abs != 0) %&gt;%
+  arrange(-delta_abs)</code></pre>
+<pre><code>## # A tibble: 22 x 5
+## # Groups:   Estado [22]
+##    Estado                Ano states states_summary delta_abs
+##    &lt;chr&gt;               &lt;dbl&gt;  &lt;dbl&gt;          &lt;dbl&gt;     &lt;dbl&gt;
+##  1 Bahia                2020  28335          28551       216
+##  2 Pará                 2020  14303          14502       199
+##  3 Alagoas              2020   8688           8885       197
+##  4 Ceará                2020  24396          24561       165
+##  5 Minas Gerais         2020  54672          54751        79
+##  6 Goiás                2020  14196          14264        68
+##  7 Maranhão             2020  11400          11460        60
+##  8 Pernambuco           2020  32863          32913        50
+##  9 Rio Grande do Sul    2020  36936          36977        41
+## 10 Rio Grande do Norte  2020   7197           7227        30
+## # … with 12 more rows</code></pre>
+<pre class="r"><code>ggplot(combined_states) + geom_histogram(aes(delta_abs), binwidth = 10)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+</div>
+</div>
 
 
 
+</div>
+</div>
 
 </div>
 
@@ -349,6 +759,32 @@ $(document).ready(function () {
 
 <!-- code folding -->
 
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
