@@ -79,4 +79,4 @@ Para "raspar" os dados do Mato Grosso, configure suas opções da seguinte forma
   ```
   Quando o script abrir a página do portal da transparência, selecione manualmente o estado do Mato Grosso.
   
-  A lógica do programa impede que o campo relativo aos estados seja preenchido quando `state == "Mato Grosso".
+  A lógica do programa impede que o campo relativo aos estados seja preenchido quando `state == "Mato Grosso"`.
