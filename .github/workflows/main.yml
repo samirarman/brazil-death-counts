@@ -13,3 +13,5 @@ jobs:
         with:
           name: docs
           path: docs/
+          name: merged_files
+          path: merged_files/
