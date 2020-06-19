@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Análise preliminar dos dados coletados</title>
+
+<script src="site_libs/jquery-1.12.4/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+<link href="site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="site_libs/datatables-binding-0.13/datatables.js"></script>
+<link href="site_libs/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="site_libs/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="site_libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
+<link href="site_libs/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Dados dos óbitos do Registro Civil</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">Sobre</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Análise preliminar dos dados coletados</h1>
+
+</div>
+
+
+<div id="nomes-das-cidades-com-problemas-de-grafia-na-tabela-by_cities_monthly" class="section level2">
+<h2>Nomes das cidades com problemas de grafia na tabela <em>by_cities_monthly</em></h2>
+<pre class="r"><code>master_table &lt;-
+  ibge_data %&gt;%
+  mutate(key = squash_string(
+    make_place_key(
+      Nome_Município,
+      Nome_UF
+    )
+  ))
+
+problem_names_c &lt;- by_city_monthly %&gt;%
+    mutate(key = squash_string(make_place_key(Cidade, Estado))) %&gt;%
+    mutate(exists = key %in% master_table$key) %&gt;%
+    filter(exists == FALSE) 
+
+
+# Pull unique values
+(problem_names_c %&gt;% pull(key) %&gt;% unique)</code></pre>
+<pre><code>##  [1] &quot;brazlandia - distrito federal&quot;             &quot;ceilandia - distrito federal&quot;             
+##  [3] &quot;gama - distrito federal&quot;                   &quot;guara - distrito federal&quot;                 
+##  [5] &quot;nucleo bandeirantes - distrito federal&quot;    &quot;paranoa - distrito federal&quot;               
+##  [7] &quot;planaltina - distrito federal&quot;             &quot;samambaia - distrito federal&quot;             
+##  [9] &quot;sobradinho - distrito federal&quot;             &quot;taguatinga - distrito federal&quot;            
+## [11] &quot;senador la roque - maranhao&quot;               &quot;governador edson lobao - maranhao&quot;        
+## [13] &quot;poxoreo - mato grosso&quot;                     &quot;sao thome das letras - minas gerais&quot;      
+## [15] &quot;brasopolis - minas gerais&quot;                 &quot;santarem - paraiba&quot;                       
+## [17] &quot;lagoa do itaenga - pernambuco&quot;             &quot;iguaraci - pernambuco&quot;                    
+## [19] &quot;santana do livramento - rio grande do sul&quot; &quot;espigao do oeste - rondonia&quot;              
+## [21] &quot;biritiba-mirim - sao paulo&quot;                &quot;sao valerio da natividade - tocantins&quot;    
+## [23] &quot;fortaleza do tabocao - tocantins&quot;          &quot;parati - rio de janeiro&quot;                  
+## [25] &quot;olhos d&#39;agua - minas gerais&quot;               &quot;sem peixe - minas gerais&quot;                 
+## [27] &quot;amparo da serra - minas gerais&quot;            &quot;florinia - sao paulo&quot;                     
+## [29] &quot;serido - paraiba&quot;                          &quot;graccho cardoso - sergipe&quot;                
+## [31] &quot;arez - rio grande do norte&quot;                &quot;couto de magalhaes - tocantins&quot;           
+## [33] &quot;eldorado dos carajas - para&quot;               &quot;jequirica - bahia&quot;                        
+## [35] &quot;santa isabel do para - para&quot;               &quot;campo de santana - paraiba&quot;</code></pre>
+</div>
+<div id="nomes-das-cidades-com-problemas-de-grafia-na-tabela-by_cities_yearly" class="section level2">
+<h2>Nomes das cidades com problemas de grafia na tabela <em>by_cities_yearly</em></h2>
+<pre class="r"><code>problem_names_cs &lt;- by_city_yearly %&gt;%
+   mutate(key = squash_string(make_place_key(Cidade, Estado))) %&gt;%
+   mutate(exists = key %in% master_table$key) %&gt;%
+   filter(exists == FALSE) 
+
+# Pull unique values
+(problem_names_cs %&gt;% pull(key) %&gt;% unique)</code></pre>
+<pre><code>##  [1] &quot;brazlandia - distrito federal&quot;             &quot;ceilandia - distrito federal&quot;             
+##  [3] &quot;gama - distrito federal&quot;                   &quot;guara - distrito federal&quot;                 
+##  [5] &quot;nucleo bandeirantes - distrito federal&quot;    &quot;paranoa - distrito federal&quot;               
+##  [7] &quot;planaltina - distrito federal&quot;             &quot;samambaia - distrito federal&quot;             
+##  [9] &quot;sobradinho - distrito federal&quot;             &quot;taguatinga - distrito federal&quot;            
+## [11] &quot;senador la roque - maranhao&quot;               &quot;governador edson lobao - maranhao&quot;        
+## [13] &quot;poxoreo - mato grosso&quot;                     &quot;sao thome das letras - minas gerais&quot;      
+## [15] &quot;sem peixe - minas gerais&quot;                  &quot;olhos d&#39;agua - minas gerais&quot;              
+## [17] &quot;brasopolis - minas gerais&quot;                 &quot;amparo da serra - minas gerais&quot;           
+## [19] &quot;santarem - paraiba&quot;                        &quot;lagoa do itaenga - pernambuco&quot;            
+## [21] &quot;iguaraci - pernambuco&quot;                     &quot;parati - rio de janeiro&quot;                  
+## [23] &quot;santana do livramento - rio grande do sul&quot; &quot;espigao do oeste - rondonia&quot;              
+## [25] &quot;florinia - sao paulo&quot;                      &quot;biritiba-mirim - sao paulo&quot;               
+## [27] &quot;sao valerio da natividade - tocantins&quot;     &quot;fortaleza do tabocao - tocantins&quot;         
+## [29] &quot;serido - paraiba&quot;                          &quot;arez - rio grande do norte&quot;               
+## [31] &quot;graccho cardoso - sergipe&quot;                 &quot;couto de magalhaes - tocantins&quot;           
+## [33] &quot;eldorado dos carajas - para&quot;               &quot;jequirica - bahia&quot;                        
+## [35] &quot;campo de santana - paraiba&quot;                &quot;santa isabel do para - para&quot;</code></pre>
+</div>
+<div id="todos-os-nomes-das-cidades-com-problemas-de-grafia" class="section level2">
+<h2>Todos os nomes das cidades com problemas de grafia</h2>
+<pre class="r"><code>c(pull(problem_names_c, key), pull(problem_names_cs, key)) %&gt;% unique</code></pre>
+<pre><code>##  [1] &quot;brazlandia - distrito federal&quot;             &quot;ceilandia - distrito federal&quot;             
+##  [3] &quot;gama - distrito federal&quot;                   &quot;guara - distrito federal&quot;                 
+##  [5] &quot;nucleo bandeirantes - distrito federal&quot;    &quot;paranoa - distrito federal&quot;               
+##  [7] &quot;planaltina - distrito federal&quot;             &quot;samambaia - distrito federal&quot;             
+##  [9] &quot;sobradinho - distrito federal&quot;             &quot;taguatinga - distrito federal&quot;            
+## [11] &quot;senador la roque - maranhao&quot;               &quot;governador edson lobao - maranhao&quot;        
+## [13] &quot;poxoreo - mato grosso&quot;                     &quot;sao thome das letras - minas gerais&quot;      
+## [15] &quot;brasopolis - minas gerais&quot;                 &quot;santarem - paraiba&quot;                       
+## [17] &quot;lagoa do itaenga - pernambuco&quot;             &quot;iguaraci - pernambuco&quot;                    
+## [19] &quot;santana do livramento - rio grande do sul&quot; &quot;espigao do oeste - rondonia&quot;              
+## [21] &quot;biritiba-mirim - sao paulo&quot;                &quot;sao valerio da natividade - tocantins&quot;    
+## [23] &quot;fortaleza do tabocao - tocantins&quot;          &quot;parati - rio de janeiro&quot;                  
+## [25] &quot;olhos d&#39;agua - minas gerais&quot;               &quot;sem peixe - minas gerais&quot;                 
+## [27] &quot;amparo da serra - minas gerais&quot;            &quot;florinia - sao paulo&quot;                     
+## [29] &quot;serido - paraiba&quot;                          &quot;graccho cardoso - sergipe&quot;                
+## [31] &quot;arez - rio grande do norte&quot;                &quot;couto de magalhaes - tocantins&quot;           
+## [33] &quot;eldorado dos carajas - para&quot;               &quot;jequirica - bahia&quot;                        
+## [35] &quot;santa isabel do para - para&quot;               &quot;campo de santana - paraiba&quot;</code></pre>
+<pre class="r"><code>list_df &lt;- list(city_monthly_table = by_city_monthly, 
+        cities_yearly_table = by_city_yearly, 
+        states_monthly_table = by_state_monthly, 
+        states_yearly_table = by_state_yearly)
+    summary &lt;- list_df %&gt;%
+        map(. %&gt;% 
+        group_by(Ano, Estado) %&gt;% 
+        summarise(Registros = sum(Registros))
+        )
+    for (i in seq_along(summary)) {
+        summary[[i]]$table &lt;- rep(names(summary[i]), nrow(summary[[i]]))
+    }
+    summary %&gt;% 
+        bind_rows %&gt;% 
+        pivot_wider(names_from = table, values_from = Registros)</code></pre>
+<pre><code>## # A tibble: 162 x 6
+## # Groups:   Ano [6]
+##      Ano Estado           city_monthly_table cities_yearly_table states_monthly_table states_yearly_table
+##    &lt;dbl&gt; &lt;chr&gt;                         &lt;dbl&gt;               &lt;dbl&gt;                &lt;dbl&gt;               &lt;dbl&gt;
+##  1  2015 Acre                           2524                2524                 2524                2524
+##  2  2015 Alagoas                        7369                7369                 7000                7000
+##  3  2015 Amapá                          1978                1991                 1989                1989
+##  4  2015 Amazonas                       2481                2656                 2542                2542
+##  5  2015 Bahia                         29777               29777                28580               28580
+##  6  2015 Ceará                          8597                8597                 8169                8169
+##  7  2015 Distrito Federal              13854               13897                13897               13897
+##  8  2015 Espírito Santo                22476               22555                22555               22555
+##  9  2015 Goiás                         22956               23143                23143               23143
+## 10  2015 Maranhão                       2033                2036                 2036                2036
+## # … with 152 more rows</code></pre>
+</div>
+<div id="somas-dos-registros-nas-tabelas" class="section level2">
+<h2>Somas dos registros nas tabelas</h2>
+<div id="tabela-by_city_monthly" class="section level3">
+<h3>Tabela <em>by_city_monthly</em></h3>
+<pre class="r"><code>ca &lt;- yearly_aggregate(by_city_monthly)
+DT::datatable(ca)</code></pre>
+<div id="htmlwidget-d13ca102c7e731227478" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-d13ca102c7e731227478">{"x":{"filter":"none","data":[["1","2","3","4","5","6"],[2015,2016,2017,2018,2019,2020],[788531,913829,947620,1078841,1213073,573725]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Ano<\/th>\n      <th>Registros<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[1,2]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="tabela-by_city_yearly" class="section level3">
+<h3>Tabela <em>by_city_yearly</em></h3>
+<pre class="r"><code>csa &lt;- yearly_aggregate(by_city_yearly)
+DT::datatable(csa)</code></pre>
+<div id="htmlwidget-15830f73b444218f95e4" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-15830f73b444218f95e4">{"x":{"filter":"none","data":[["1","2","3","4","5","6"],[2015,2016,2017,2018,2019,2020],[789647,914655,948373,1079757,1213573,574811]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Ano<\/th>\n      <th>Registros<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[1,2]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="tabela-by_state_monthly" class="section level3">
+<h3>Tabela <em>by_state_monthly</em></h3>
+<pre class="r"><code>sa &lt;- yearly_aggregate(by_state_monthly)
+DT::datatable(sa)</code></pre>
+<div id="htmlwidget-23b8aceac6bade6bf0c1" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-23b8aceac6bade6bf0c1">{"x":{"filter":"none","data":[["1","2","3","4","5","6"],[2015,2016,2017,2018,2019,2020],[787300,906479,947069,1075726,1212326,573560]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Ano<\/th>\n      <th>Registros<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[1,2]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="tabela-by_state_monthly-1" class="section level3">
+<h3>Tabela <em>by_state_monthly</em></h3>
+<pre class="r"><code>ssa &lt;- yearly_aggregate(by_state_yearly)
+DT::datatable(ssa)</code></pre>
+<div id="htmlwidget-84efd677a5e06e6b7cd3" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-84efd677a5e06e6b7cd3">{"x":{"filter":"none","data":[["1","2","3","4","5","6"],[2015,2016,2017,2018,2019,2020],[787300,906479,947069,1075726,1212326,574811]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Ano<\/th>\n      <th>Registros<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[1,2]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="comparação-entre-tabelas" class="section level3">
+<h3>Comparação entre tabelas</h3>
+<pre class="r"><code>bind_rows(&quot;cities_monthly&quot; = ca, 
+          &quot;cities_yearly&quot; = csa, 
+          &quot;states_monthly&quot; = sa, 
+          &quot;states_yearly&quot; = ssa, 
+          .id = &quot;origin_table&quot;) %&gt;% 
+  pivot_wider(names_from = origin_table, values_from = Registros) %&gt;%
+  DT::datatable()</code></pre>
+<div id="htmlwidget-11757fefc4b1d9ea42e3" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-11757fefc4b1d9ea42e3">{"x":{"filter":"none","data":[["1","2","3","4","5","6"],[2015,2016,2017,2018,2019,2020],[788531,913829,947620,1078841,1213073,573725],[789647,914655,948373,1079757,1213573,574811],[787300,906479,947069,1075726,1212326,573560],[787300,906479,947069,1075726,1212326,574811]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Ano<\/th>\n      <th>cities_monthly<\/th>\n      <th>cities_yearly<\/th>\n      <th>states_monthly<\/th>\n      <th>states_yearly<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[1,2,3,4,5]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="tabela-by_city_monthly-vs-by_city_yearly" class="section level3">
+<h3>Tabela <em>by_city_monthly</em> vs <em>by_city_yearly</em></h3>
+<pre class="r"><code>cma &lt;- by_city_monthly %&gt;%
+  group_by(Estado, Ano) %&gt;%
+  summarise(Registros = sum(Registros))
+
+cysa &lt;- by_city_yearly %&gt;%
+  select(Cidade, Estado, Ano, Registros) %&gt;%
+    group_by(Estado, Ano) %&gt;%
+  summarise(Registros = sum(Registros))
+
+
+combined_cities &lt;- 
+    bind_rows(&quot;cities&quot; = cma, &quot;cities_summary&quot; = cysa, .id = &quot;origin_table&quot;) %&gt;%
+    pivot_wider(names_from = origin_table, values_from = Registros) %&gt;%
+    mutate(delta_abs = abs(cities_summary - cities))
+
+
+summary(combined_cities)</code></pre>
+<pre><code>##     Estado               Ano           cities       cities_summary     delta_abs     
+##  Length:162         Min.   :2015   Min.   :   870   Min.   :   870   Min.   :  0.00  
+##  Class :character   1st Qu.:2016   1st Qu.:  6680   1st Qu.:  6681   1st Qu.:  0.00  
+##  Mode  :character   Median :2018   Median : 14518   Median : 14542   Median :  8.00  
+##                     Mean   :2018   Mean   : 34047   Mean   : 34079   Mean   : 32.88  
+##                     3rd Qu.:2019   3rd Qu.: 32800   3rd Qu.: 32848   3rd Qu.: 36.00  
+##                     Max.   :2020   Max.   :311562   Max.   :311570   Max.   :249.00</code></pre>
+<pre class="r"><code>combined_cities %&gt;% 
+  filter(delta_abs != 0) %&gt;%
+  arrange(-delta_abs) %&gt;%
+  DT::datatable()</code></pre>
+<div id="htmlwidget-fc13827c5abbf044faf4" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-fc13827c5abbf044faf4">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88","89","90","91","92","93","94","95","96","97","98","99","100","101","102","103","104","105","106","107","108","109","110","111","112","113","114","115","116","117","118"],["Ceará","Amapá","Pará","Ceará","Paraíba","Goiás","Amazonas","Paraíba","Paraíba","Rio Grande do Norte","Bahia","Tocantins","Mato Grosso","Mato Grosso","Rio Grande do Norte","São Paulo","Maranhão","Santa Catarina","Goiás","Bahia","Amazonas","Minas Gerais","Goiás","Rio de Janeiro","Rio Grande do Norte","Maranhão","Espírito Santo","Rio de Janeiro","Tocantins","Paraíba","Pernambuco","Piauí","Minas Gerais","Pará","Paraíba","Rio Grande do Norte","Maranhão","Distrito Federal","Rio Grande do Sul","Goiás","Paraíba","Piauí","Santa Catarina","Paraná","Tocantins","Goiás","Rio Grande do Norte","São Paulo","Amapá","Rio Grande do Norte","Rio Grande do Sul","Espírito Santo","Sergipe","Pernambuco","Rondônia","Rondônia","Ceará","Rio de Janeiro","Ceará","Espírito Santo","Espírito Santo","Mato Grosso do Sul","Pará","Ceará","Santa Catarina","Pernambuco","São Paulo","Espírito Santo","Mato Grosso","Rondônia","Santa Catarina","Amapá","Goiás","Amapá","Piauí","Pará","Sergipe","Distrito Federal","Minas Gerais","Distrito Federal","Maranhão","Roraima","São Paulo","Rondônia","Roraima","Acre","Pará","Rondônia","São Paulo","Espírito Santo","Minas Gerais","Sergipe","Rondônia","Amazonas","Maranhão","Mato Grosso","Amapá","Distrito Federal","Pernambuco","Piauí","São Paulo","Sergipe","Amapá","Amazonas","Distrito Federal","Maranhão","Mato Grosso do Sul","Pará","Paraná","Pernambuco","Piauí","Rio Grande do Sul","Santa Catarina","Sergipe","Sergipe","Tocantins","Tocantins","Tocantins"],[2016,2018,2020,2020,2015,2015,2015,2016,2017,2016,2018,2015,2018,2017,2018,2015,2020,2017,2016,2016,2019,2020,2020,2015,2017,2018,2015,2017,2017,2019,2020,2020,2019,2019,2018,2019,2019,2015,2020,2019,2020,2018,2020,2020,2018,2017,2020,2020,2016,2015,2015,2017,2015,2019,2017,2016,2019,2019,2018,2016,2018,2016,2015,2017,2018,2016,2018,2019,2020,2019,2015,2020,2018,2015,2016,2018,2020,2016,2017,2020,2016,2018,2019,2015,2017,2020,2017,2018,2016,2020,2016,2017,2020,2020,2015,2015,2019,2019,2017,2017,2017,2016,2017,2018,2017,2017,2020,2016,2016,2018,2015,2017,2019,2018,2019,2016,2019,2020],[26632,2110,14294,24356,17651,22956,2481,21107,22488,7802,56765,2731,15325,16249,13560,286739,11352,35996,24537,31077,13879,54657,14175,12550,10621,13846,22476,17414,4901,26946,32858,5332,123437,25529,25672,16443,20370,13854,36936,32198,12199,10549,17661,30166,5946,28589,7196,148800,1888,3916,32624,24404,11087,61664,7277,7014,41180,137615,40381,23276,23758,14629,3785,37516,40110,56782,302907,24742,5766,7840,29695,1085,30602,1978,7062,16328,5500,13974,136705,6594,5129,2308,311562,5475,1693,1998,11113,7723,299939,11824,134611,12758,3517,9780,2033,15713,2519,14861,58513,5769,299240,12327,2263,6666,14395,5955,6723,10527,75251,59449,2668,47048,41512,12602,12616,4102,5960,2648],[26881,2324,14502,24561,17843,23143,2656,21270,22648,7957,56907,2860,15446,16367,13678,286850,11460,36099,24639,31176,13976,54751,14264,12636,10706,13930,22555,17493,4972,27012,32913,5385,123486,25578,25721,16488,20414,13897,36977,32234,12235,10585,17695,30198,5978,28620,7227,148831,1918,3945,32653,24431,11112,61688,7300,7036,41201,137636,40401,23296,23778,14609,3805,37535,40129,56764,302925,24759,5783,7856,29679,1099,30616,1991,7075,16340,5510,13983,136714,6602,5121,2316,311570,5482,1700,2004,11119,7729,299945,11829,134616,12763,3521,9783,2036,15716,2521,14863,58515,5771,299242,12329,2264,6667,14396,5956,6724,10526,75250,59450,2669,47049,41513,12603,12617,4101,5961,2649],[249,214,208,205,192,187,175,163,160,155,142,129,121,118,118,111,108,103,102,99,97,94,89,86,85,84,79,79,71,66,55,53,49,49,49,45,44,43,41,36,36,36,34,32,32,31,31,31,30,29,29,27,25,24,23,22,21,21,20,20,20,20,20,19,19,18,18,17,17,16,16,14,14,13,13,12,10,9,9,8,8,8,8,7,7,6,6,6,6,5,5,5,4,3,3,3,2,2,2,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Estado<\/th>\n      <th>Ano<\/th>\n      <th>cities<\/th>\n      <th>cities_summary<\/th>\n      <th>delta_abs<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[2,3,4,5]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<pre class="r"><code>ggplot(combined_cities) + geom_histogram(aes(delta_abs), binwidth = 10)</code></pre>
+<p><img src="sanity_checks_files/figure-html/unnamed-chunk-13-2.png" width="672" /></p>
+</div>
+<div id="tabela-by_state_monthly-vs-by_state_yearly" class="section level3">
+<h3>Tabela <em>by_state_monthly</em> vs <em>by_state_yearly</em></h3>
+<pre class="r"><code>sma &lt;- by_state_monthly %&gt;%
+  group_by(Estado, Ano) %&gt;%
+  summarise(Registros = sum(Registros))
+
+sysa &lt;- by_state_yearly %&gt;%
+  select(Estado, Ano, Registros)
+
+combined_states &lt;- 
+    bind_rows(&quot;states&quot; = sma, &quot;states_summary&quot; = sysa, .id = &quot;origin_table&quot;) %&gt;%
+    pivot_wider(names_from = origin_table, values_from = Registros) %&gt;%
+    mutate(delta_abs = abs(states_summary - states))
+
+summary(combined_states)</code></pre>
+<pre><code>##     Estado               Ano           states       states_summary     delta_abs      
+##  Length:162         Min.   :2015   Min.   :   870   Min.   :   870   Min.   :  0.000  
+##  Class :character   1st Qu.:2016   1st Qu.:  6681   1st Qu.:  6681   1st Qu.:  0.000  
+##  Mode  :character   Median :2018   Median : 14518   Median : 14542   Median :  0.000  
+##                     Mean   :2018   Mean   : 33966   Mean   : 33974   Mean   :  7.722  
+##                     3rd Qu.:2019   3rd Qu.: 32803   3rd Qu.: 32841   3rd Qu.:  0.000  
+##                     Max.   :2020   Max.   :311562   Max.   :311562   Max.   :216.000</code></pre>
+<pre class="r"><code>combined_states %&gt;% 
+  filter(delta_abs != 0) %&gt;%
+  arrange(-delta_abs) %&gt;%
+  DT::datatable()</code></pre>
+<div id="htmlwidget-aee4dc7e7d623bed7fd7" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-aee4dc7e7d623bed7fd7">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22"],["Bahia","Pará","Alagoas","Ceará","Minas Gerais","Goiás","Maranhão","Pernambuco","Rio Grande do Sul","Rio Grande do Norte","Paraná","São Paulo","Santa Catarina","Rio de Janeiro","Mato Grosso","Piauí","Sergipe","Acre","Paraíba","Espírito Santo","Mato Grosso do Sul","Tocantins"],[2020,2020,2020,2020,2020,2020,2020,2020,2020,2020,2020,2020,2020,2020,2020,2020,2020,2020,2020,2020,2020,2020],[28335,14303,8688,24396,54672,14196,11400,32863,36936,7197,30171,148804,17673,69704,5766,5370,5504,1999,12230,11827,6723,2648],[28551,14502,8885,24561,54751,14264,11460,32913,36977,7227,30198,148831,17695,69722,5783,5385,5510,2004,12235,11829,6724,2649],[216,199,197,165,79,68,60,50,41,30,27,27,22,18,17,15,6,5,5,2,1,1]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Estado<\/th>\n      <th>Ano<\/th>\n      <th>states<\/th>\n      <th>states_summary<\/th>\n      <th>delta_abs<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[2,3,4,5]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<pre class="r"><code>ggplot(combined_states) + geom_histogram(aes(delta_abs), binwidth = 10)</code></pre>
+<p><img src="sanity_checks_files/figure-html/unnamed-chunk-14-2.png" width="672" /></p>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
