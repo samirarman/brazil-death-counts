@@ -1,0 +1,7 @@
+name: "Make merge_data"
+description: "Merge individual scraped csv"
+author: "samir.arman@gmail.com"
+
+runs:
+  using: "docker"
+  image: "Dockerfile"
