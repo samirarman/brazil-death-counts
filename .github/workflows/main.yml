@@ -6,10 +6,13 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - uses: ./
-      - name: Upload artifacts
+      - name: Upload merged files
         uses: actions/upload-artifact@master
         with:
           name: merged_data
           path: merged_data/
+      - name: Upload website
+        uses: action/upload-artifacts@master
+        with:
           name: docs
           path: docs/
