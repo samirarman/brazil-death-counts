@@ -9,6 +9,8 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@master
         with:
+          name: merged_data
+          path: merged_data/
+        with:
           name: docs
           path: docs/
-
