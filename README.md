@@ -4,7 +4,7 @@ Base de dados de óbitos *"raspada"* do [Portal da Transparência do Registro Ci
 
 ## Base de dados
 
-Pode ser encontrada no [data.world](https://data.world/samirarman/brazil-death-data) ou neste [repositório](https:://github.com/samirarman/brazil-death-data).
+Pode ser encontrada no [data.world](https://data.world/samirarman/brazil-death-data) ou neste repositório.
 
 Neste repositório você encontra os seguintes diretórios:
 
