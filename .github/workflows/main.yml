@@ -12,9 +12,8 @@ jobs:
     steps:
       - name: Make directories
         run: |
-          cd $HOME
-          mkdir merge_files
-          mkdir docs
+          mkdir /Users/runner/runners/2.169.1/work/brazil-death-data/brazil-death-data/merged_data
+          mkdir /Users/runner/runners/2.169.1/work/brazil-death-data/brazil-death-data/docs
           
       - name: Checkout repo
         uses: actions/checkout@v2
@@ -49,6 +48,7 @@ jobs:
           
       - name: Make merged files
         run: |
+          cd /Users/runner/runners/2.169.1/work/brazil-death-data/brazil-death-data
           R -e 'getwd()'
           R -e 'source("merge_data.R")'
           
