@@ -1,4 +1,3 @@
-![.github/workflows/main.yml](https://github.com/samirarman/brazil-death-data/workflows/.github/workflows/main.yml/badge.svg)
 
 O "scrape" é realizado de forma semi-automática. Cada 'job' deve ser manualmente configurado.
 
