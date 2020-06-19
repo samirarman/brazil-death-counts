@@ -9,9 +9,12 @@ jobs:
       - uses: ./
 
       - name: Upload merged files
-        uses: actions/upload-artifact@master
+      - uses: actions/upload-artifact@master
         with:
           name: docs
           path: docs/
+
+      - uses: actions/upload-artifact@master 
+        with:
           name: merged_files
           path: merged_files/
