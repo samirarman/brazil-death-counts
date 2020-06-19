@@ -11,11 +11,5 @@ jobs:
       - name: Upload merged files
         uses: actions/upload-artifact@master
         with:
-          name: merged_data
-          path: merged_data/
-
-      - name: Upload website
-        uses: action/upload-artifacts@master
-        with:
           name: docs
           path: docs/
