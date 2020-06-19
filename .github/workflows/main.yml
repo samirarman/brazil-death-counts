@@ -11,6 +11,5 @@ jobs:
         with:
           name: merged_data
           path: merged_data/
-        with:
           name: docs
           path: docs/
