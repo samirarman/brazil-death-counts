@@ -7,14 +7,17 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - uses: ./
-
+        
+      - name: Upload site
+        uses: actions/upload-artifact@master 
+        with:
+          name: merged_files
+          path: merged_files/
+  
       - name: Upload merged files
-      - uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@master
         with:
           name: docs
           path: docs/
 
-      - uses: actions/upload-artifact@master 
-        with:
-          name: merged_files
-          path: merged_files/
+      
