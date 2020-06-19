@@ -11,7 +11,7 @@ ibge_url <-
     "ftp://geoftp.ibge.gov.br/organizacao_do_territorio/estrutura_territorial/divisao_territorial/2019/DTB_2019.zip"
 
 get_ibge_file <- function(url) {
-    download.file(url, "ibge_file.zip", method = "curl")
+    download.file(url, "ibge_file.zip")
     unzip("ibge_file.zip",
           "RELATORIO_DTB_BRASIL_MUNICIPIO.xls",
           unzip = "internal")
