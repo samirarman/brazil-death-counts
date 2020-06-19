@@ -49,6 +49,7 @@ jobs:
           
       - name: Make merged files
         run: |
+          R -e 'getwd()'
           R -e 'source("merge_data.R")'
           
       - name: Make site
