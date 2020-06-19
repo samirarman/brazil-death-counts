@@ -12,8 +12,9 @@ jobs:
     steps:
       - name: Make directories
         run: |
-          mkdir $HOME/merge_files
-          mkdir $HOME/home/docs
+          cd $HOME
+          mkdir merge_files
+          mkdir docs
           
       - name: Checkout repo
         uses: actions/checkout@v2
