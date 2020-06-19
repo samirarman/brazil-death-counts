@@ -12,12 +12,12 @@ jobs:
         uses: actions/upload-artifact@master 
         with:
           name: merged_files
-          path: merged_files/
+          path: home/brazil-death-data/merged_files/
   
       - name: Upload merged files
         uses: actions/upload-artifact@master
         with:
           name: docs
-          path: docs/
+          path: home/brazil-death-data/docs/
 
       
