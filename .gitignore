@@ -7,3 +7,5 @@
 .xlsx
 .zip
 .drake
+docs*
+merged_data*
