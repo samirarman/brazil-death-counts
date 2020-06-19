@@ -2,7 +2,7 @@ on:
   push:
     branches: add_workflow
 
-name: blogdown
+name: Make stugg
 
 jobs:
   build:
@@ -35,7 +35,7 @@ jobs:
           
       - name: Install drake
         run: |
-          R -e 'install.packages("drake")'
+          R -e 'install.packages(c("drake","tidyverse","visNetwork","rmarkdown", "stringi", "readxl", "DT")'
           
       - name: Install visNetwork
         run: |
