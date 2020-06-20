@@ -36,6 +36,17 @@ options <-
   ) %>%
   as_tibble()
 
+# options <-
+#   expand_grid(
+#     year = "2020",
+#     month = c("Maio", "Junho"),
+#     region = "Todas",
+#     state = "Mato Grosso",
+#     write = TRUE,
+#     path = "scraped_data/cities_monthly/"
+#   ) %>%
+#   as_tibble()
+
 # SCRAPING ---------
 data <- options %>%
   pmap_dfr(scrape_deaths)

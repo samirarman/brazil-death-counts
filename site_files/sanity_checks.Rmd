@@ -2,7 +2,7 @@
 title: "Análise preliminar dos dados coletados"
 output: html_document
 ---
-
+Última atualização: **`r Sys.time()`**
 ```{r, echo=FALSE}
 loadd(by_city_monthly)
 loadd(by_city_yearly)
@@ -26,7 +26,7 @@ make_place_key <- function(city, state) {
 ```
 
 
-## Nomes das cidades com problemas de grafia na tabela *by_cities_monthly*
+### Nomes das cidades com problemas de grafia na tabela *by_cities_monthly*
 ```{r}
 master_table <-
   ibge_data %>%
@@ -48,7 +48,7 @@ problem_names_c <- by_city_monthly %>%
 
 ```
 
-## Nomes das cidades com problemas de grafia na tabela *by_cities_yearly*
+### Nomes das cidades com problemas de grafia na tabela *by_cities_yearly*
 ```{r}
 problem_names_cs <- by_city_yearly %>%
    mutate(key = squash_string(make_place_key(Cidade, Estado))) %>%
@@ -59,7 +59,7 @@ problem_names_cs <- by_city_yearly %>%
 (problem_names_cs %>% pull(key) %>% unique)
 ```
 
-## Todos os nomes das cidades com problemas de grafia
+### Todos os nomes das cidades com problemas de grafia
 
 ```{r}
 c(pull(problem_names_c, key), pull(problem_names_cs, key)) %>% unique
@@ -85,7 +85,7 @@ list_df <- list(city_monthly_table = by_city_monthly,
     
 ```
 
-## Somas dos registros nas tabelas
+### Somas dos registros nas tabelas
 ```{r, echo=FALSE}
 # Define a helper function
 yearly_aggregate <- function(df) {
@@ -95,34 +95,34 @@ yearly_aggregate <- function(df) {
 }
 ```
 
-### Tabela *by_city_monthly*
+#### Tabela *by_city_monthly*
 
 ```{r}
 ca <- yearly_aggregate(by_city_monthly)
 DT::datatable(ca)
 ```
 
-### Tabela *by_city_yearly*
+#### Tabela *by_city_yearly*
 ```{r}
 csa <- yearly_aggregate(by_city_yearly)
 DT::datatable(csa)
 ```
 
-### Tabela *by_state_monthly*
+#### Tabela *by_state_monthly*
 
 ```{r}
 sa <- yearly_aggregate(by_state_monthly)
 DT::datatable(sa)
 ```
 
-### Tabela *by_state_monthly*
+#### Tabela *by_state_monthly*
 
 ```{r}
 ssa <- yearly_aggregate(by_state_yearly)
 DT::datatable(ssa)
 ```
 
-### Comparação entre tabelas
+#### Comparação entre tabelas
 
 ```{r}
 bind_rows("cities_monthly" = ca, 
@@ -134,7 +134,7 @@ bind_rows("cities_monthly" = ca,
   DT::datatable()
 ```
 
-### Tabela *by_city_monthly* vs *by_city_yearly*
+#### Tabela *by_city_monthly* vs *by_city_yearly*
 
 ```{r}
 cma <- by_city_monthly %>%
@@ -163,7 +163,7 @@ combined_cities %>%
 ggplot(combined_cities) + geom_histogram(aes(delta_abs), binwidth = 10)
 ```
 
-### Tabela *by_state_monthly* vs *by_state_yearly*
+#### Tabela *by_state_monthly* vs *by_state_yearly*
 
 ```{r}
 sma <- by_state_monthly %>%
