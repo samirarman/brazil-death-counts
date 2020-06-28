@@ -53,8 +53,8 @@ rs <- rsDriver(browser = "firefox", port = 2001L)
   ``` 
   - Ou use sua IDE preferida para fazer o "source" do script.
   
-  O *script* `merge_data.R` é uma plano do pacote `{{drake}}` para automatizar a criação do conteúdo do diretório `merged_data`.
+  O *script* `merge_data.R` é uma plano do pacote `{drake}` para automatizar a criação do conteúdo do diretório `merged_data`.
   
-  Antes de usá-lo, crie um diretório `.drake` no diretório-raiz do projeto para servir de *cache* para o `{{drake}}`.
+  Antes de usá-lo, crie um diretório `.drake` no diretório-raiz do projeto para servir de *cache* para o `{drake}`.
   
   O *script* `RStudio_job_poster.R` serve para tirar vantagem da funcionalidade `jobs` do RStudio, permitindo postar mais de um *script* de raspagem simultaneamente. Use com sabedoria para não ser ejetado do servidor.
