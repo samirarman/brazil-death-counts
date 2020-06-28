@@ -76,10 +76,6 @@ scrape_deaths <-
   function(year, month, region, state, write = TRUE, path) {
     data <- tibble()
 
-    if (state != "Mato Grosso") {
-      set_clean_state(year_field, month_field, region_field, state_field)
-    }
-
     year_field$sendKeysToElement(list(year))
     year_field$sendKeysToElement(list("", key = "enter"))
 
@@ -89,10 +85,10 @@ scrape_deaths <-
     region_field$sendKeysToElement(list(region))
     region_field$sendKeysToElement(list("", key = "enter"))
 
-    # Sending keys to Mato Grosso state won't work.
-    # When scraping Mato Grosso state, select it
-    # manually on the website.
-    if (state != "Mato Grosso") {
+    if (state == "Mato Grosso") {
+      state_field$sendKeysToElement(list("mat", key = "down_arrow"))
+      state_field$sendKeysToElement(list("", key = "enter"))
+    } else {
       state_field$sendKeysToElement(list(paste(state, " ", sep = "")))
       state_field$sendKeysToElement(list("", key = "enter"))
     }
