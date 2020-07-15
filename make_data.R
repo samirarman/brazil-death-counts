@@ -3,86 +3,74 @@ library(RSelenium)
 library(purrr)
 library(dplyr)
 
-source("R/constants.R")
+source("constants.R")
 
 
-system("java -Dwebdriver.gecko.driver=/usr/bin/geckodriver -jar ~/.local/share/binman_seleniumserver/generic/3.141.59/selenium-server-standalone-3.141.59.jar  -port 4545", wait =  FALSE)
-rs <- rsDriver(port = 4567L, browser = "firefox", extraCapabilities = list("moz:firefoxOptions" = list(
-  args = list('--headless')
-)))
+rd <- 
+  remoteDriver(
+    browser = "firefox", 
+    port = 4545L, 
+    extraCapabilities = 
+      list(
+        "moz:firefoxOptions" = 
+          list(
+            args = 
+              list('--headless')
+          )
+      )
+   )
 
-rs <- RSelenium::rsDriver(port = 4567L, browser = "firefox")
-
-
-rd <- rs$client
 rd$open()
 
-options <-
-  expand.grid(
-    year = as.character(2015:2020),
-    month = "Todos",
-    state = "Todos",
-    wait = 2L) %>% 
-  as_tibble() %>%
-  mutate(across(where(is.factor), as.character))
+cat("Browser opened...\n")
 
-# Launch scripts in background    
-options %>% 
-  pmap_dfr(~arpenr::get_deaths(rd, ..1, ..2, ..3, ..4)) %>% 
-  write.csv("merged_data/by_state_yearly.csv")
+args <- commandArgs(trailingOnly = TRUE)
 
-options <-
-  expand.grid(
-    year = as.character(2015:2020),
-    month = MONTHS,
-    state = "Todos",
-    wait = 2L) %>% 
-  as_tibble() %>%
-  mutate(across(where(is.factor), as.character))
+year_start = args[1]
+year_finish = args[2]
 
-# Launch scripts in background    
-options %>% 
-  pmap_dfr(~arpenr::get_deaths(rd, ..1, ..2, ..3, ..4)) %>% 
-  write.csv("merged_data/by_state_monthly.csv")
+month_start <- args[3]
+month_finish <- args[4]
 
+state = args[5]
 
-options <-
-  expand.grid(
-    year = as.character(2015:2020),
-    month = "Todos",
-    state = STATES,
-    wait = 2L
-  ) %>%
-  as_tibble() %>%
-  mutate(across(where(is.factor), as.character))
+file_name = args[6]
 
-# Launch scripts in background
-options %>%
-  pmap_dfr( ~ arpenr::get_deaths(rd, ..1, ..2, ..3, ..4)) %>%
-  write.csv("merged_data/by_city_yearly.csv")
+years <- as.character(year_start:year_finish)
 
-Sys.sleep(100)
-
-for (i in seq_along(MONTHS)) {
-  options <-
-    expand.grid(
-      year = as.character(2015),
-      month = MONTHS[i],
-      state = STATES,
-      wait = 2L
-    ) %>%
-    as_tibble() %>%
-    mutate(across(where(is.factor), as.character))
-  
-  # Launch scripts in background
-  options %>%
-    pmap_dfr( ~ arpenr::get_deaths(rd, ..1, ..2, ..3, ..4)) %>%
-    write.csv(paste0("merged_data/by_city_monthly", i, ".csv"))
-  
-  Sys.sleep(120)
-  
+if (month_start == "Todos") {
+  months <- "Todos"
+} else {
+  months <- MONTHS[month_start:month_finish]
 }
 
+if (state == "Todos") {
+  states <- "Todos"
+} else {
+  states <- STATES
+}
 
-# Clean up
-rd$quit()
+options <-
+  expand.grid(
+    years,
+    months,
+    states,
+    wait = 2L) %>%
+  mutate(across(where(is.factor), as.character))
+
+cat("Reading data...\n")
+
+data <- options %>% 
+  pmap_dfr(~arpenr::get_deaths(rd, ..1, ..2, ..3, ..4))
+
+head(data)
+
+cat("Finish reading data, writing file...\n")
+
+write.csv(data, file_name)
+
+cat("File written...\n")
+
+rd$close()
+
+cat("Connection closed...\n")
