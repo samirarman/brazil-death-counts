@@ -8,8 +8,9 @@ source("constants.R")
 
 rd <- 
   remoteDriver(
-    browser = "firefox", 
-    port = 4545L, 
+    remoteServerAddr = "selenium",
+    port = 4444L,
+    browser = "firefox",
     extraCapabilities = 
       list(
         "moz:firefoxOptions" = 

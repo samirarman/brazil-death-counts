@@ -1,0 +1,13 @@
+version: '2'
+services:
+  scraper: 
+    build: .
+    image: brazil-death-data:latest
+    links:
+      - selenium:selenium
+    volumes:
+      - ./merged_data:/home/brazil-death-data/merged_data
+  selenium:
+    image: selenium/standalone-firefox:3.141.59-20200525
+    volumes:
+      - /dev/shm:/dev/shm
