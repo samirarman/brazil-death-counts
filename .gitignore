@@ -7,4 +7,6 @@
 .xlsx
 .zip
 .drake
-.out
+merged_data/*.out
+*.log
+
