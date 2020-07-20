@@ -9,5 +9,7 @@ services:
       - ./merged_data:/home/brazil-death-data/merged_data
   selenium:
     image: selenium/standalone-firefox:3.141.59-20200525
+    ports:
+     - 4445:4444
     volumes:
       - /dev/shm:/dev/shm
