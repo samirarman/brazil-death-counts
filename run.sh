@@ -1,14 +1,14 @@
 #!/bin/bash
 
-nohup docker-compose up --build > docker.log &
+nohup /usr/local/bin/docker-compose up --build > docker.log &
 
-OUT=$(docker-compose ps --filter "status=stopped" --services)
+OUT=$(/usr/local/bin/docker-compose ps --filter "status=stopped" --services)
 
 while true
 
 do
 
- SERVICE_STOPPED=$(docker-compose ps --service --filter "status=stopped")
+ SERVICE_STOPPED=$(/usr/local/bin/docker-compose ps --service --filter "status=stopped")
 
  if [[ "$SERVICE_STOPPED" == "scraper" ]] 
  then
@@ -21,5 +21,5 @@ done
 
 sleep 1m
 
-docker-compose down
+/usr/local/bin/docker-compose down
 
