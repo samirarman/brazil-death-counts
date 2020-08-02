@@ -38,8 +38,13 @@ jobs:
       run: |
         chmod +x run.sh
         ./run.sh
-        ls -a merged_data/* 
+        
+    - name: Print logs
+      run: |
+        echo "<<<<<<<<<<<DOCKER LOGS>>>>>>>>>>>>>>>>"
         cat docker.log
+        echo "<<<<<<<<<<<RUN LOGS>>>>>>>>>>>>>>>>>>>"
+        cat merged_data/by_state_yearly.out
         
     #- name: Create Pull Request
     #  uses: peter-evans/create-pull-request@v3
