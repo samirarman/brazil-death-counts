@@ -33,12 +33,13 @@ jobs:
       run: |
         which docker-compose
         
-    #- name: Run the script 
-    #  run: |
-    #    chmod +x run.sh
-    #    ./run.sh
-    #    ls -a merged_data/* 
-    #    cat docker.log
+        
+    - name: Run the script 
+      run: |
+        chmod +x run.sh
+        ./run.sh
+        ls -a merged_data/* 
+        cat docker.log
         
     #- name: Create Pull Request
     #  uses: peter-evans/create-pull-request@v3
