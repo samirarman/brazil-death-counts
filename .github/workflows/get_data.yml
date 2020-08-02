@@ -22,7 +22,7 @@ jobs:
     # Runs a single command using the runners shell
     - name: Build an image
       run: | 
-        docker build --no-cache -t brazil-death-data 
+        docker build --no-cache -t brazil-death-data .
     
     - name: Run the script 
       run: |
