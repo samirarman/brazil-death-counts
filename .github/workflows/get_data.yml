@@ -34,7 +34,7 @@ jobs:
         which docker-compose
         
     - name: Pull selenium-standalone
-      run: Docker pull selenium/standalone-firefox:3.141.59-20200525
+      run: docker pull selenium/standalone-firefox:3.141.59-20200525
         
     - name: Run the script 
       run: |
