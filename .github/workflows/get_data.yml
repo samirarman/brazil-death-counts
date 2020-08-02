@@ -5,8 +5,8 @@ name: CI
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
 on:
-  schedule :
-    - cron: '*10 * * * *'
+  push :
+    - cron: '40 * * * *'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -29,11 +29,6 @@ jobs:
       run: |
         chmod +x run.sh
         ./run.sh
-        
-    - name: Commit only what is needed
-      run: |
-        git add merged_data/*
-        git commit -m "Update data"
         
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v3
