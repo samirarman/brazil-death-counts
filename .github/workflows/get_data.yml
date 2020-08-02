@@ -46,10 +46,12 @@ jobs:
         
     - name: Print logs
       run: |
-        echo "<<<<<<<<<<<DOCKER LOGS>>>>>>>>>>>>>>>>"
-        cat docker.log
         echo "<<<<<<<<<<<RUN LOGS>>>>>>>>>>>>>>>>>>>"
         cat merged_data/by_state_yearly.out
+        cat /merged_data_by_state_yearly.out
+        echo "<<<<<<<<<<<DOCKER LOGS>>>>>>>>>>>>>>>>"
+        cat docker.log
+        
         
     #- name: Create Pull Request
     #  uses: peter-evans/create-pull-request@v3
