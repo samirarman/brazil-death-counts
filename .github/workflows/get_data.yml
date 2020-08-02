@@ -33,11 +33,16 @@ jobs:
       run: |
         which docker-compose
         
+    - name: Pull selenium-standalone
+      run: Docker pull selenium/standalone-firefox:3.141.59-20200525
         
     - name: Run the script 
       run: |
         chmod +x run.sh
         ./run.sh
+        
+    - name: Check produced files
+      run: ls -a -l merged_data
         
     - name: Print logs
       run: |
