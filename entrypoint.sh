@@ -92,3 +92,5 @@ for i in {1..8}
 do
  rm /home/brazil-death-data/merged_data/by_city_monthly$i.csv
 done
+
+Rscript last_run_check.R >> /home/brazil-death-data/merged_data/last_run.txt
