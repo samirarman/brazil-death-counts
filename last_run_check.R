@@ -48,7 +48,7 @@ cat("", "\n")
 
 print("STATES YEARLY COUNTS")
 count <- unique(list_df$state_yearly$Estado) %>% length
-should_have <- count * (current_year - 2015 + 1) + count * current_month
+should_have <- count * (current_year - 2015 + 1)
 print_compare(rows_count$state_yearly, should_have)
 cat("", "\n")
 
