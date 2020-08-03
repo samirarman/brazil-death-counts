@@ -1,7 +1,8 @@
 name: Data retriever
 
 on:
-  push:
+  schedule:
+    - cron: '0 5 * * 1,4'
 
 jobs:
   build:
