@@ -2,15 +2,41 @@
 
 Base de dados de óbitos *"raspada"* do [Portal da Transparência do Registro Civil](https://transparencia.registrocivil.org.br/registros) e o código-fonte usado.
 
-## Base de dados
+O objetivo deste projeto é facilitar o acesso à base de dados do registro civil enquanto não existir API disponível para consulta ou atualização do sistema SIM do SUS.
 
-Pode ser encontrada no [data.world](https://data.world/samirarman/brazil-death-data) ou neste repositório, no diretório `merged_data`.
+Os dados podem ser encontrados no [data.world](https://data.world/samirarman/brazil-death-data) ou neste repositório, no diretório `merged_data`.
 
-Mais informações sobre a estrutura dos dados estão [aqui](https://samirarman.github.io/brazil-death-data)
+O [data.world](https://data.world/samirarman/brazil-death-data) fornece algumas ferramentas simples para visualização e consultas diretamente no navegador, sem necessidade de utilizar softwares externos
 
+**Os dados são fornecidos "como estão". Faça as verificações necessárias.**
 
-**Lembre-se: os dados são *RAW DATA* e por natureza são incompletos. Faça os ajustes de tratamentos estatísticos necessários.**
+### Tabelas disponíveis
 
-Acompanhe as atualizações nos dados através dos *commits*. 
+Quatro tabelas estão disponíveis:
 
-Os dados no [*dataset* no data.world](https://data.world/samirarman/brazil-death-data) são atualizados automaticamente através deste repositório uma vez ao dia.
+* *by_city_monthly*: óbitos registrados em cada cidade, mês a mês.
+* *by_city_yearly*: óbitos registrados em cada cidade, ano a ano.
+* *by_state_monthly*: óbitos registrados em cada estado, mês a mês.
+* *by_state_yearly*: óbitos registrados em cada estado, ano a ano.
+
+### Leitura direta para o R e Python
+
+#### R
+```r
+city_monthly <- read.csv("https://github.com/samirarman/brazil-death-data/raw/master/merged_data/by_city_monthly.csv")
+city_yearly <- read.csv("https://github.com/samirarman/brazil-death-data/raw/master/merged_data/by_city_yearly.csv")
+state_monthly <- read.csv("https://github.com/samirarman/brazil-death-data/raw/master/merged_data/by_state_monthly.csv")
+state_yearly <- read.csv("https://github.com/samirarman/brazil-death-data/raw/master/merged_data/by_state_yearly.csv")
+```
+#### Python
+```python
+import pandas as pd
+city_monthly = pd.read_csv("https://github.com/samirarman/brazil-death-data/raw/master/merged_data/by_city_monthly.csv")
+city_yearly = pd.read_csv("https://github.com/samirarman/brazil-death-data/raw/master/merged_data/by_city_yearly.csv")
+state_monthly = pd.read_csv("https://github.com/samirarman/brazil-death-data/raw/master/merged_data/by_state_monthly.csv")
+state_yearly = pd.read_csv("https://github.com/samirarman/brazil-death-data/raw/master/merged_data/by_state_yearly.csv")
+```
+
+### Atualizações
+
+Os dados são automaticamente atualizados às segundas-feiras e às quintas-feiras. 
