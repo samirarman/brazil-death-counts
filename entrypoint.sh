@@ -6,4 +6,7 @@ nohup Rscript make_data.R 2015 2020 "Todos" "" "Todos" "./merged_data/by_state_y
 job1=$!
 echo "Starting job $job1"
 
+wait $job1
+echo "Finished job $job1"
+
 
