@@ -54,8 +54,8 @@ jobs:
         cat docker.log
         
         
-    #- name: Create Pull Request
-    #  uses: peter-evans/create-pull-request@v3
-    #  with:
-    #    title: Latest run
-    #    branch: update-data
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v3
+      with:
+        title: Latest run
+        branch: update-data
