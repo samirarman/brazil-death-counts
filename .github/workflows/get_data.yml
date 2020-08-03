@@ -42,7 +42,9 @@ jobs:
         ./run.sh
         
     - name: Check produced files
-      run: ls -a -l merged_data
+      run: |
+        ls -a -l
+        ls -a -l merged_data
         
     - name: Print logs
       run: |
