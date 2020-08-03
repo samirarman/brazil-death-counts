@@ -48,7 +48,6 @@ jobs:
       run: |
         echo "<<<<<<<<<<<RUN LOGS>>>>>>>>>>>>>>>>>>>"
         cat merged_data/by_state_yearly.out
-        cat /merged_data_by_state_yearly.out
         echo "<<<<<<<<<<<DOCKER LOGS>>>>>>>>>>>>>>>>"
         cat docker.log
         
