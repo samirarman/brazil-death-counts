@@ -1,6 +1,6 @@
 # `brazil-death-data`
 
-Base de dados de óbitos *"raspada"* do [Portal da Transparência do Registro Civil](https://transparencia.registrocivil.org.br/registros) e o código-fonte usado.
+Base de dados de óbitos *"raspada"* do [Portal da Transparência do Registro Civil](https://transparencia.registrocivil.org.br/registros) ("dados dos cartórios") e o código-fonte usado.
 
 O objetivo deste projeto é facilitar o acesso à base de dados do registro civil enquanto não existir API disponível para consulta ou atualização do sistema SIM do SUS.
 
