@@ -1,0 +1,35 @@
+name: Data retriever
+
+on:
+  schedule:
+    - cron: '0 5 * * 1,4'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Run the script 
+      run: |
+        chmod +x run.sh
+        ./run.sh
+        
+    - name: Check produced files
+      run: |
+        ls -a -l
+        ls -a -l merged_data
+        
+    - name: Print logs
+      run: |
+        echo "<<<<<<<<<<<RUN LOGS>>>>>>>>>>>>>>>>>>>"
+        cat merged_data/by_state_yearly.out
+        echo "<<<<<<<<<<<DOCKER LOGS>>>>>>>>>>>>>>>>"
+        cat docker.log
+        
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v3
+      with:
+        title: Latest run
+        branch: update-data

@@ -1,7 +1,7 @@
 library(purrr)
 
-file_list <- vector("character", 4)
-for (i in seq_along(1:4)) {
+file_list <- vector("character", 8)
+for (i in seq_along(1:8)) {
   file_list[i] <- paste0("./merged_data/by_city_monthly", i, ".csv")
 }
 
