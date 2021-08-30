@@ -39,4 +39,4 @@ state_yearly = pd.read_csv("https://github.com/samirarman/brazil-death-data/raw/
 
 ### Atualizações
 
-Os dados são automaticamente atualizados às segundas-feiras e às quintas-feiras. 
+Os dados são atualizados automaticamente às segundas-feiras. 
