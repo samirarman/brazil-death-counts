@@ -2,7 +2,7 @@ name: Data retriever
 
 on:
   schedule:
-    - cron: '0 5 * * 1,4'
+    - cron: '0 5 * * 1'
 
 jobs:
   build:
