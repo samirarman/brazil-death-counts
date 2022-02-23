@@ -4,11 +4,11 @@
 sleep 1m
 
 # by_state_yearly and by_state_monthly
-nohup Rscript make_data.R 2015 2021 "Todos" "" "Todos" "./merged_data/by_state_yearly.csv" > /home/brazil-death-data/merged_data/by_state_yearly.out &
+nohup Rscript make_data.R 2015 2022 "Todos" "" "Todos" "./merged_data/by_state_yearly.csv" > /home/brazil-death-data/merged_data/by_state_yearly.out &
 job1=$!
 echo "Starting job $job1"
 
-nohup Rscript make_data.R 2015 2021 "1" "12" "Todos" "./merged_data/by_state_monthly.csv" > /home/brazil-death-data/merged_data/by_state_monthly.out &
+nohup Rscript make_data.R 2015 2022 "1" "12" "Todos" "./merged_data/by_state_monthly.csv" > /home/brazil-death-data/merged_data/by_state_monthly.out &
 job2=$!
 echo "Starting job $job2"
 
@@ -19,7 +19,7 @@ wait $job2
 echo "Finished job $job2"
 
 # by_city_yearly
-nohup Rscript make_data.R 2015 2021 "Todos" "" "" "./merged_data/by_city_yearly.csv" > /home/brazil-death-data/merged_data/by_city_yearly.out &
+nohup Rscript make_data.R 2015 2022 "Todos" "" "" "./merged_data/by_city_yearly.csv" > /home/brazil-death-data/merged_data/by_city_yearly.out &
 job=$!
 echo "Starting job $job"
 
@@ -31,7 +31,7 @@ nohup Rscript make_data.R 2015 2017 "1" "3" "" "./merged_data/by_city_monthly1.c
 job1=$!
 echo "Starting job $job1"
 
-nohup Rscript make_data.R 2018 2021 "1" "3" "" "./merged_data/by_city_monthly2.csv" > /home/brazil-death-data/merged_data/by_city_monthly.out &
+nohup Rscript make_data.R 2018 2022 "1" "3" "" "./merged_data/by_city_monthly2.csv" > /home/brazil-death-data/merged_data/by_city_monthly.out &
 job2=$!
 echo "Starting job $job2"
 
@@ -45,7 +45,7 @@ nohup Rscript make_data.R 2015 2017 "4" "6" "" "./merged_data/by_city_monthly3.c
 job1=$!
 echo "Starting job $job1"
 
-nohup Rscript make_data.R 2018 2021 "4" "6" "" "./merged_data/by_city_monthly4.csv" > /home/brazil-death-data/merged_data/by_city_monthly.out &
+nohup Rscript make_data.R 2018 2022 "4" "6" "" "./merged_data/by_city_monthly4.csv" > /home/brazil-death-data/merged_data/by_city_monthly.out &
 job2=$!
 echo "Starting job $job2"
 
@@ -60,7 +60,7 @@ nohup Rscript make_data.R 2015 2017 "7" "9" "" "./merged_data/by_city_monthly5.c
 job1=$!
 echo "Starting job $job1"
 
-nohup Rscript make_data.R 2018 2021 "7" "9" "" "./merged_data/by_city_monthly6.csv" > /home/brazil-death-data/merged_data/by_city_monthly.out &
+nohup Rscript make_data.R 2018 2022 "7" "9" "" "./merged_data/by_city_monthly6.csv" > /home/brazil-death-data/merged_data/by_city_monthly.out &
 job2=$!
 echo "Starting job $job2"
 
@@ -74,7 +74,7 @@ nohup Rscript make_data.R 2015 2017 "10" "12" "" "./merged_data/by_city_monthly7
 job1=$!
 echo "Starting job $job1"
 
-nohup Rscript make_data.R 2018 2021 "10" "12" "" "./merged_data/by_city_monthly8.csv" > /home/brazil-death-data/merged_data/by_city_monthly.out &
+nohup Rscript make_data.R 2018 2022 "10" "12" "" "./merged_data/by_city_monthly8.csv" > /home/brazil-death-data/merged_data/by_city_monthly.out &
 job2=$!
 echo "Starting job $job2"
 
